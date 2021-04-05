@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "exp_prof",
+  "info": {
+    "name": "Experiência Profissional",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "funcao": {
+      "type": "string"
+    },
+    "ent_empregadora": {
+      "type": "string"
+    },
+    "cidade": {
+      "type": "string"
+    },
+    "em_curso": {
+      "type": "boolean"
+    },
+    "responsabilidades": {
+      "type": "string"
+    },
+    "atividade_setor": {
+      "type": "string"
+    },
+    "departamento": {
+      "type": "string"
+    },
+    "email_organizacao": {
+      "type": "email"
+    },
+    "sitio_web": {
+      "type": "string"
+    },
+    "hiper": {
+      "type": "string"
+    },
+    "descricao": {
+      "type": "text"
+    },
+    "endereco": {
+      "model": "endereco"
+    },
+    "eportfolio": {
+      "model": "eportfolio",
+      "via": "trabalhos"
+    },
+    "data_int": {
+      "type": "json"
+    }
+  }
+}

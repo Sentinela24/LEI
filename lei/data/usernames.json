@@ -1,0 +1,603 @@
+[
+  {
+
+    "id_utilizador": 0,
+    "username": "Verna",
+    "email": "verna@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 1,
+    "username": "King",
+    "email": "king@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 2,
+    "username": "Beatrice",
+    "email": "beatrice@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 3,
+    "username": "Bishop",
+    "email": "bishop@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 4,
+    "username": "Burgess",
+    "email": "burgess@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 5,
+    "username": "Francisca",
+    "email": "francisca@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 6,
+    "username": "Malinda",
+    "email": "malinda@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 7,
+    "username": "Carr",
+    "email": "carr@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 8,
+    "username": "Lourdes",
+    "email": "lourdes@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 9,
+    "username": "Lidia",
+    "email": "lidia@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 10,
+    "username": "Ursula",
+    "email": "ursula@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 11,
+    "username": "Misty",
+    "email": "misty@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 12,
+    "username": "Bass",
+    "email": "bass@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 13,
+    "username": "Reynolds",
+    "email": "reynolds@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 14,
+    "username": "Patrica",
+    "email": "patrica@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 15,
+    "username": "Estes",
+    "email": "estes@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 16,
+    "username": "Vivian",
+    "email": "vivian@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 17,
+    "username": "Hahn",
+    "email": "hahn@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 18,
+    "username": "Foster",
+    "email": "foster@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 19,
+    "username": "Anita",
+    "email": "anita@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 20,
+    "username": "Cynthia",
+    "email": "cynthia@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 21,
+    "username": "Gillespie",
+    "email": "gillespie@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 22,
+    "username": "Krystal",
+    "email": "krystal@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 23,
+    "username": "Katelyn",
+    "email": "katelyn@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 24,
+    "username": "Lottie",
+    "email": "lottie@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 25,
+    "username": "Cecile",
+    "email": "cecile@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 26,
+    "username": "Miranda",
+    "email": "miranda@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 27,
+    "username": "Franks",
+    "email": "franks@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 28,
+    "username": "Harris",
+    "email": "harris@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 29,
+    "username": "Alejandra",
+    "email": "alejandra@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 30,
+    "username": "Brenda",
+    "email": "brenda@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 31,
+    "username": "Goodman",
+    "email": "goodman@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 32,
+    "username": "Sadie",
+    "email": "sadie@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 33,
+    "username": "Nell",
+    "email": "nell@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 34,
+    "username": "Weber",
+    "email": "weber@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 35,
+    "username": "Morrison",
+    "email": "morrison@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 36,
+    "username": "Mccray",
+    "email": "mccray@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 37,
+    "username": "Boyer",
+    "email": "boyer@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 38,
+    "username": "Sheena",
+    "email": "sheena@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 39,
+    "username": "Manuela",
+    "email": "manuela@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 40,
+    "username": "Savage",
+    "email": "savage@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 41,
+    "username": "Quinn",
+    "email": "quinn@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 42,
+    "username": "Faulkner",
+    "email": "faulkner@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 43,
+    "username": "Kathleen",
+    "email": "kathleen@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 44,
+    "username": "Casey",
+    "email": "casey@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 45,
+    "username": "Saundra",
+    "email": "saundra@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 46,
+    "username": "Mari",
+    "email": "mari@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 47,
+    "username": "Erin",
+    "email": "erin@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 48,
+    "username": "Nannie",
+    "email": "nannie@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 49,
+    "username": "Fox",
+    "email": "fox@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 50,
+    "username": "Cotton",
+    "email": "cotton@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 51,
+    "username": "Corinne",
+    "email": "corinne@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 52,
+    "username": "Barnes",
+    "email": "barnes@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 53,
+    "username": "Chavez",
+    "email": "chavez@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 54,
+    "username": "Romero",
+    "email": "romero@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 55,
+    "username": "Pauline",
+    "email": "pauline@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 56,
+    "username": "Lora",
+    "email": "lora@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 57,
+    "username": "Hoffman",
+    "email": "hoffman@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 58,
+    "username": "Lenore",
+    "email": "lenore@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 59,
+    "username": "Parker",
+    "email": "parker@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 60,
+    "username": "Barber",
+    "email": "barber@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 61,
+    "username": "Anna",
+    "email": "anna@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 62,
+    "username": "Glenda",
+    "email": "glenda@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 63,
+    "username": "Robles",
+    "email": "robles@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 64,
+    "username": "Gay",
+    "email": "gay@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 65,
+    "username": "Tammi",
+    "email": "tammi@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 66,
+    "username": "Lilian",
+    "email": "lilian@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 67,
+    "username": "Margery",
+    "email": "margery@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 68,
+    "username": "Violet",
+    "email": "violet@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 69,
+    "username": "Susie",
+    "email": "susie@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 70,
+    "username": "Wise",
+    "email": "wise@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 71,
+    "username": "Sanchez",
+    "email": "sanchez@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 72,
+    "username": "Nita",
+    "email": "nita@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 73,
+    "username": "Randi",
+    "email": "randi@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 74,
+    "username": "Bolton",
+    "email": "bolton@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 75,
+    "username": "Maryellen",
+    "email": "maryellen@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 76,
+    "username": "Madelyn",
+    "email": "madelyn@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 77,
+    "username": "Blankenship",
+    "email": "blankenship@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 78,
+    "username": "Ball",
+    "email": "ball@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 79,
+    "username": "Deleon",
+    "email": "deleon@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 80,
+    "username": "Gwen",
+    "email": "gwen@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 81,
+    "username": "Alyssa",
+    "email": "alyssa@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 82,
+    "username": "Leanne",
+    "email": "leanne@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 83,
+    "username": "Aguilar",
+    "email": "aguilar@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 84,
+    "username": "Goff",
+    "email": "goff@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 85,
+    "username": "Rosalyn",
+    "email": "rosalyn@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 86,
+    "username": "Willa",
+    "email": "willa@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 87,
+    "username": "Keri",
+    "email": "keri@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 88,
+    "username": "Clayton",
+    "email": "clayton@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 89,
+    "username": "Pat",
+    "email": "pat@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 90,
+    "username": "Stuart",
+    "email": "stuart@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 91,
+    "username": "Stevenson",
+    "email": "stevenson@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 92,
+    "username": "Langley",
+    "email": "langley@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 93,
+    "username": "Serena",
+    "email": "serena@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 94,
+    "username": "Polly",
+    "email": "polly@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 95,
+    "username": "Jillian",
+    "email": "jillian@sapo.pt",
+    "password": 123
+  },
+  {
+    "id_utilizador": 96,
+    "username": "Billie",
+    "email": "billie@gmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 97,
+    "username": "Rice",
+    "email": "rice@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 98,
+    "username": "Gaines",
+    "email": "gaines@hotmail.com",
+    "password": 123
+  },
+  {
+    "id_utilizador": 99,
+    "username": "Maggie",
+    "email": "maggie@sapo.pt",
+    "password": 123
+  }
+]

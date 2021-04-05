@@ -1,0 +1,12 @@
+[
+  {
+    'repeat(100)': {
+    	id_utilizador : '{{index()}}',
+    	username : '{{firstName()}}',
+    	email () {
+        	return `${this.username}@${["gmail.com", "hotmail.com", "sapo.pt"][Math.floor(Math.random() * ["gmail.com", "hotmail.com", "sapo.pt"].length)]}`.toLowerCase().replace(/\s/g,'');
+      	},
+      	password : '123',
+    }
+  }
+] 

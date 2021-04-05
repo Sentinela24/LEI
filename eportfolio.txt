@@ -1,0 +1,16 @@
+[
+  {
+    'repeat(100)': {
+          	id_ePortefolio: '{{index()}}',
+		nome: '{{firstName()}} {{surname()}}',
+		genero: '{{random("M", "F", "Outro")}}',
+		nacionalidade: '{{random("Portugal", "França", "Itália", "Espanha", "Alemanha")}}',
+		email() {
+			return `${this.nome}@${["gmail.com", "hotmail.com", "sapo.pt"][Math.floor(Math.random() * ["gmail.com", "hotmail.com", "sapo.pt"].length)]}`.toLowerCase().replace(/\s/g,'');
+		}, 
+		telemovel: '{{phone()}}',
+		profissao: '{{random("carpinteiro", "arquiteto", "professor", "banqueiro")}}',
+		id_endereco: '{{index()}}',
+    	}
+  }
+]
