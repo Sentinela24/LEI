@@ -4,7 +4,10 @@ import { authHeader } from '../_helpers';
 export const userService = {
     login,
     logout,
+    register,
     getAll
+    //getById,
+    //update
 };
 
 function login(identifier, password) {
@@ -31,6 +34,16 @@ function login(identifier, password) {
 function logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('user');
+}
+
+function register(user) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    };
+
+    return fetch(`${config.apiUrl}/auth/local/register`, requestOptions).then(handleResponse);
 }
 
 function getAll() {

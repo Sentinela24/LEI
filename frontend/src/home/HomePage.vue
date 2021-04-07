@@ -1,13 +1,12 @@
 <template>
     <div>
-        <h1>Hi {{user.user.username}}!</h1>
-        <p>You're logged in with Vue + Vuex & JWT!!</p>
-        <h3>Users from secure api end point:</h3>
-        <em v-if="users.loading">Loading users...</em>
+        <h1>Olá {{user.user.username}}!</h1>
+        <h3>Lista de utilizadores:</h3>
+        <em v-if="users.loading">A carregar utilizadores...</em>
         <span v-if="users.error" class="text-danger">ERROR: {{users.error}}</span>
         <ul v-if="users.items">
             <li v-for="user in users.items" :key="user.id">
-                {{user.username + ' ' + user.email}}
+                <a :href =  "'http://localhost:8080/users/:' + user.id"> {{user.username + ' ' + user.email}}</a>
             </li>
         </ul>
         <p>
