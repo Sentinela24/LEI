@@ -33,19 +33,20 @@ export default {
     computed: {
         loggingIn () {
             return this.$store.state.authentication.status.loggingIn;
-        }
+        },
     },
+
     created () {
         // reset login status
         this.$store.dispatch('authentication/logout');
     },
+
     methods: {
-        handleSubmit (e) {
+        handleSubmit:function (e) {
             this.submitted = true;
             const { identifier, password } = this;
-            const { dispatch } = this.$store;
             if (identifier && password) {
-                dispatch('authentication/login', { identifier, password });
+                this.$store.dispatch('authentication/login', { identifier, password });
             }
         }
     }

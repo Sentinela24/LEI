@@ -1,9 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import HomePage from '../home/HomePage'
-import LoginPage from '../login/LoginPage'
-import RegisterPage from '../register/RegisterPage'
+import HomePage from '../views/HomePage'
+import LoginPage from '../views/LoginPage'
+import RegisterPage from '../views/RegisterPage'
+import PerfilPage from '../views/PerfilPage'
+import EportfolioPage from '../views/EportfolioPage'
 
 Vue.use(Router);
 
@@ -13,6 +15,8 @@ export const router = new Router({
     { path: '/', component: HomePage },
     { path: '/login', component: LoginPage },
     { path: '/register', component: RegisterPage },
+    { path: '/users/:userId', name: 'users', component: PerfilPage, props: true },
+    { path: '/eportfolio', component: EportfolioPage },
 
     // otherwise redirect to home
     { path: '*', redirect: '/' }
@@ -21,7 +25,7 @@ export const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/register'];
+  const publicPages = ['/login', '/register', '/users/:userId', '/eportfolio'];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem('user');
 

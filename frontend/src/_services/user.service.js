@@ -5,9 +5,9 @@ export const userService = {
     login,
     logout,
     register,
-    getAll
-    //getById,
-    //update
+    getAll,
+    getById,
+    create_eport
 };
 
 function login(identifier, password) {
@@ -53,6 +53,25 @@ function getAll() {
     };
 
     return fetch(`${config.apiUrl}/users`, requestOptions).then(handleResponse);
+}
+
+function getById(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
+}
+
+function create_eport(eportfolio) {
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader(),
+        body: JSON.stringify(eportfolio)
+    };
+
+    return fetch(`${config.apiUrl}/eportfolios`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
