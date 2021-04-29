@@ -27,8 +27,8 @@
       "type": "text"
     },
     "eportfolio": {
-      "model": "eportfolio",
-      "via": "competencias_pessoais"
+      "via": "competencias_pessoais",
+      "model": "eportfolio"
     }
   }
 }

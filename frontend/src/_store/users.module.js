@@ -1,3 +1,4 @@
+import { createNamespacedHelpers } from 'vuex';
 import { router } from '../_helpers';
 import { userService } from '../_services';
 
@@ -5,8 +6,7 @@ export const users = {
     namespaced: true,
     state: {
         all: {},
-        user: null,
-        eportfolio: null
+        user: null
     },
     actions: {
         getAll({ commit }) {
@@ -19,34 +19,61 @@ export const users = {
                 );
         },
         getUser({ commit }, { id }) {
-            console.log( id);
             commit('getUserRequest', { id });
 
             userService.getById(id)
                 .then(
-                    user => commit('getUserSuccess', user),
+                    user => {
+                        commit('getUserSuccess', user)
+                    },
                     error => commit('getUserFailure', error)
                 );
         },
-        putEportfolio({ dispatch, commit }, eportfolio) {
-            commit('putEportfolioRequest', eportfolio);
+        putEportfolio({ dispatch, commit }, { eportfolio, user }) {
+            //commit('getUserRequest', user.id );
+            
+            var u
+            userService.getById(user.id)
+                .then(
+
+                    s => u = s,
+                    error => {
+                        commit('getUserFailure', error);
+                        dispatch('alert/error', error, { root: true });
+                    }
+                )
 
             userService.create_eport(eportfolio)
                 .then(
-                    eportfolio => {
-                        commit('putEportfolioSuccess', eportfolio);
-                        router.go(-1);
-                        setTimeout(() => {
-                            // display success message after route change completes
-                            dispatch('alert/success', 'Eportfolio adicionado', { root: true });
-                        })
+                    eport => {
+                        
+                        console.log("UUSEERR: " + JSON.stringify(u))
+                        userService.updateUser( u, eport)
+                            .then(
+                                user => {
+                                    console.log("user: " + JSON.stringify(user))
+                                    commit('getUserSuccess', user),
+
+                                    router.go(-1);
+                                    setTimeout(() => {
+                                        // display success message after route change completes
+                                        dispatch('alert/success', 'Eportfolio adicionado', { root: true });
+                                    })
+                                },
+                                error => {
+                                    commit('getUserFailure', error);
+                                    dispatch('alert/error', error, { root: true });
+                                }
+                            )
                     },
                     error => {
-                        commit('putEportfolioFailure', error);
+                        commit('getUserFailure', error);
                         dispatch('alert/error', error, { root: true });
                     }
                 );
-        }
+            //console.log("id: " + id_user);
+            //console.log("eportfolio: " +  this.eportfolio );
+        },
     },
     mutations: {
         getAllRequest(state) {
@@ -68,10 +95,10 @@ export const users = {
             state.user = { error };
         },
         putEportfolioRequest(state, eportfolio) {
-            state.status = { registering: true };
+            state.eportfolio = { registering: true };
         },
         putEportfolioSuccess(state, eportfolio) {
-            state.status = { };
+            state.eportfolio = { params: eportfolio };
         },
         putEportfolioFailure(state, error) {
             state.status = { };

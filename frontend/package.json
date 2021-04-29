@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "connect-history-api-fallback": "^1.6.0",
+    "history-api-fallback": "0.0.0",
     "vee-validate": "^2.2.8",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",

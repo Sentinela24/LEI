@@ -6,8 +6,10 @@
         <span v-if="users.error" class="text-danger">ERROR: {{users.error}}</span>
         <ul v-if="users.params">
             <li v-for="user in users.params" :key="user.id">
-                <!--  <a :href =  "'http://localhost:8080/users/' + user.id"> {{user.username + ' ' + user.email}}</a> -->
-                <router-link :to="{ name: 'users', params: { userId: user.id }}">{{user.username + ' ' + user.email}}</router-link>
+            <!-- <a :href =  "$router.resolve({ name: 'users', params: { userId: user.id }}).href" class="nav-link">{{user.username + ' ' + user.email}}</a> -->
+
+            <router-link :to="$router.resolve({ name: 'users', params: { userId: user.id }}).href">{{user.username + ' ' + user.email}}</router-link>
+            <!-- <router-link :to="{ name: 'users', params: { userId: user.id }}">{{user.username + ' ' + user.email}}</router-link> -->
             </li>
         </ul>
         <p>
@@ -17,7 +19,7 @@
 </template>
 
 <script>
-export default {
+export default { 
     computed: {
         user () {
             return this.$store.state.authentication.user;
@@ -26,8 +28,23 @@ export default {
             return this.$store.state.users.all;
         }
     },
+
+
+    /*
+    methods: {
+        setData(err, user, users){
+            if (err) {
+                this.error = err.toString()
+            } else {
+                this.user = user
+                this.users = users
+            }
+        }
+    },
+    */
     created () {
         this.$store.dispatch('users/getAll');
     }
+    
 };
 </script>

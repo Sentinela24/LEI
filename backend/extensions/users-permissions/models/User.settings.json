@@ -59,9 +59,9 @@
       "plugin": "users-permissions",
       "configurable": false
     },
-    "eportfolio": {
+    "eportfolios": {
       "via": "user",
-      "model": "eportfolio"
+      "collection": "eportfolio"
     }
   }
 }

@@ -10,6 +10,8 @@
 		}, 
 		telemovel: '{{phone()}}',
 		profissao: '{{random("carpinteiro", "arquiteto", "professor", "banqueiro")}}',
+		data_nasc: '{{date(new Date(1970,0,1))}}',
+		avatar: null,
 		id_endereco: '{{index()}}',
     	}
   }

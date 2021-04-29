@@ -63,8 +63,8 @@
       "model": "endereco"
     },
     "eportfolio": {
-      "model": "eportfolio",
-      "via": "educacoes"
+      "via": "educacoes",
+      "model": "eportfolio"
     }
   }
 }

@@ -1,5 +1,7 @@
 import config from 'config';
 import { authHeader } from '../_helpers';
+import { special_authHeader } from '../_helpers/special_auth-header';
+import { users } from '../_store/users.module';
 
 export const userService = {
     login,
@@ -7,7 +9,8 @@ export const userService = {
     register,
     getAll,
     getById,
-    create_eport
+    create_eport,
+    updateUser
 };
 
 function login(identifier, password) {
@@ -24,7 +27,6 @@ function login(identifier, password) {
             if (user.jwt) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user));
-                console.log(localStorage.getItem('user'));
             }
 
             return user;
@@ -65,13 +67,50 @@ function getById(id) {
 }
 
 function create_eport(eportfolio) {
+    
     const requestOptions = {
         method: 'POST',
         headers: authHeader(),
-        body: JSON.stringify(eportfolio)
+        body: eportfolio
     };
 
     return fetch(`${config.apiUrl}/eportfolios`, requestOptions).then(handleResponse);
+}
+
+function updateUser(user, eportfolio){
+    console.log("id: " + JSON.stringify(user))
+    //console.log("eportfolio: " + eportfolio.id);
+
+    //console.log("eport" + eportfolio.id)
+
+    var eports
+    
+    if (typeof user.eportfolios === 'undefined'){
+        //console.log(JSON.stringify(eportfolio))
+        console.log("bbbbbbbbbbbbbbb" + user.eportfolios)
+
+        eports = '{"eportfolios" : [' + JSON.stringify(eportfolio) + ']}'
+
+    }
+    else {
+        console.log("aaaaaaaaaaaaaaaaa" + JSON.stringify(user.eportfolios))
+
+        user['eportfolios'].push({"_id" : eportfolio.id})
+
+        eports = '{"eportfolios" :' + JSON.stringify(user.eportfolios) + '}'
+
+    }
+
+
+    console.log("eports: " + eports)
+
+    const requestOptions = {
+        method: 'PUT',
+        headers: special_authHeader(),
+        body: eports
+    };
+
+    return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

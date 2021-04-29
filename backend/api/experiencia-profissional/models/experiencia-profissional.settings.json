@@ -48,8 +48,8 @@
       "model": "endereco"
     },
     "eportfolio": {
-      "model": "eportfolio",
-      "via": "trabalhos"
+      "via": "trabalhos",
+      "model": "eportfolio"
     },
     "data_int": {
       "type": "json"

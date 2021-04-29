@@ -6,6 +6,17 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.vue']
     },
+
+    entry: {
+        app: "./src/index.js"
+    },
+    
+    output: {
+      filename: "index_bundle.js",
+      publicPath: '/',
+      path: path.resolve(__dirname, "dist")
+    },
+
     module: {
         rules: [
             {
@@ -24,7 +35,7 @@ module.exports = {
         template: './src/index.html'
     })],
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
     },
     externals: {
         // global app config object

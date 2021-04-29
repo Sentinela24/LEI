@@ -17,7 +17,7 @@ export const authentication = {
                 .then(
                     user => {
                         commit('loginSuccess', user);
-                        router.push('/').catch((erro) => {
+                        router.push('/users').catch((erro) => {
                             console.log(erro)});
                         
                     },

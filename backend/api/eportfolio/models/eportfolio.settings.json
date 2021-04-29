@@ -32,7 +32,7 @@
     "user": {
       "plugin": "users-permissions",
       "model": "user",
-      "via": "eportfolio"
+      "via": "eportfolios"
     },
     "endereco": {
       "model": "endereco"
@@ -42,16 +42,30 @@
       "via": "eportfolio"
     },
     "trabalhos": {
-      "via": "eportfolio",
-      "collection": "experiencia-profissional"
+      "collection": "experiencia-profissional",
+      "via": "eportfolio"
     },
     "educacoes": {
-      "via": "eportfolio",
-      "collection": "educacao"
+      "collection": "educacao",
+      "via": "eportfolio"
     },
     "competencias_pessoais": {
-      "via": "eportfolio",
-      "model": "competencias-pessoais"
+      "model": "competencias-pessoais",
+      "via": "eportfolio"
+    },
+    "avatar": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    },
+    "data_nasc": {
+      "type": "datetime"
     }
   }
 }

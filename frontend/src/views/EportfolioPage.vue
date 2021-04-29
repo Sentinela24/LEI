@@ -8,13 +8,16 @@
                 <div v-if="submitted && errors.has('nome')" class="invalid-feedback">{{ errors.first('nome') }}</div>
             </div>
             <div class="form-group">
+                <input type="file" @change="onFileSelected" name="avatar">
+            </div>
+            <div class="form-group">
                 <label for="genero">Género</label>
                 <br/>
-                <input type="radio" v-model="eportfolio.genero" value="F" class="form-radio" :class="{ 'is-invalid': submitted && errors.has('genero') }" />
+                <input type="radio" v-model="eportfolio.genero" value="F" name="genero" class="form-radio" :class="{ 'is-invalid': submitted && errors.has('genero') }" />
                 <label for="F">F</label>
-                <input type="radio" v-model="eportfolio.genero" value="M" class="form-radio" :class="{ 'is-invalid': submitted && errors.has('genero') }" />
+                <input type="radio" v-model="eportfolio.genero" value="M" name="genero" class="form-radio" :class="{ 'is-invalid': submitted && errors.has('genero') }" />
                 <label for="M">M</label>
-                <input type="radio" v-model="eportfolio.genero" value="Outro" class="form-radio" :class="{ 'is-invalid': submitted && errors.has('genero') }" />
+                <input type="radio" v-model="eportfolio.genero" value="Outro" name="genero" class="form-radio" :class="{ 'is-invalid': submitted && errors.has('genero') }" />
                 <label for="Outro">Outro</label>
                 
                 <div v-if="submitted && errors.has('genero')" class="invalid-feedback">{{ errors.first('genero') }}</div>
@@ -55,12 +58,14 @@ export default {
     data () {
         return {
             eportfolio: {
+                id : '',
                 nome: '',
                 genero: '',
                 nacionalidade: '',
                 email: '',
                 telemovel: '',
-                profissao: ''
+                profissao: '',
+                avatar: null
             },
             submitted: false
         }
@@ -75,9 +80,55 @@ export default {
             this.submitted = true;
             this.$validator.validate().then(valid => {
                 if (valid) {
-                    this.$store.dispatch('users/putEportfolio', this.eportfolio );
+                    
+                    const formElement = document.querySelector('form');
+                    const formData = new FormData();
+
+                    const formElements = formElement.elements;
+
+                    const data = {};
+
+                    for (let i = 0; i < formElements.length; i++) {
+                        const currentElement = formElements[i];
+                        //console.log(currentElement)
+                        if (!['submit', 'file'].includes(currentElement.type)) {
+                            if('radio'.includes(currentElement.type)){
+                                if(currentElement.checked)
+                                    data[currentElement.name] = currentElement.value;
+                            }
+                            else{
+                                data[currentElement.name] = currentElement.value;
+                            }
+
+                        } else if (currentElement.type === 'file') {
+                        if (currentElement.files.length === 1) {
+                            const file = currentElement.files[0];
+                            formData.append(`files.${currentElement.name}`, file, file.name);
+                        } else {
+                            for (let i = 0; i < currentElement.files.length; i++) {
+                                const file = currentElement.files[i];
+
+                                formData.append(`files.${currentElement.name}`, file, file.name);
+                            }
+                        }
+                      }
+                    }
+
+                    formData.append('data', JSON.stringify(data));
+
+                    /*
+                    formData.forEach(element => {
+                        console.log(element)
+                    })
+                    */
+                   
+                    this.$store.dispatch('users/putEportfolio', { eportfolio: formData, user : this.$store.state.authentication.user.user })
                 }
             });
+        },
+
+        onFileSelected(e) {
+            this.eportfolio.avatar = e.target.files[0]
         }
     }
 };
