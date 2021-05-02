@@ -1,50 +1,50 @@
 <template>
-    <div>
-        <h1>Olá {{user.user.username}}!</h1>
-        <h3>Lista de utilizadores:</h3>
-        <em v-if="users.loading">A carregar utilizadores...</em>
-        <span v-if="users.error" class="text-danger">ERROR: {{users.error}}</span>
-        <ul v-if="users.params">
-            <li v-for="user in users.params" :key="user.id">
-            <!-- <a :href =  "$router.resolve({ name: 'users', params: { userId: user.id }}).href" class="nav-link">{{user.username + ' ' + user.email}}</a> -->
+    <v-container fill-height fluid>
+        <v-row align="center">
+            <v-col ml="1">
+                <div class="title">
+                    <h1 class="blue--text display-3"> Gestor de CVs e ePortefolios </h1>
+                    <p class="subheading"> O próximo passo na tua carreira... </p>
+                    <v-row>
+                        <v-col>
+                            <v-btn to="/login" color="primary">
+                                LogIn
+                            </v-btn>
+                        </v-col>
+                        <v-col>
+                            <v-btn to="/register" color="primary">
+                                Register
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </div>
+            </v-col>
 
-            <router-link :to="$router.resolve({ name: 'users', params: { userId: user.id }}).href">{{user.username + ' ' + user.email}}</router-link>
-            <!-- <router-link :to="{ name: 'users', params: { userId: user.id }}">{{user.username + ' ' + user.email}}</router-link> -->
-            </li>
-        </ul>
-        <p>
-            <router-link to="/login">Logout</router-link>
-        </p>
-    </div>
+            <v-col md="4" class="ml-auto">
+                <v-img
+                      src="https://picsum.photos/400/?random"
+                      aspect-ratio="1.7"
+                    ></v-img>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
-export default { 
-    computed: {
-        user () {
-            return this.$store.state.authentication.user;
-        },
-        users () {
-            return this.$store.state.users.all;
-        }
-    },
+import { VCol, VRow, VContainer, VImg } from 'vuetify/lib'
 
-
-    /*
-    methods: {
-        setData(err, user, users){
-            if (err) {
-                this.error = err.toString()
-            } else {
-                this.user = user
-                this.users = users
-            }
-        }
-    },
-    */
-    created () {
-        this.$store.dispatch('users/getAll');
-    }
+export default {
     
+    components: {
+        VCol, 
+        VRow, 
+        VContainer,
+        VImg
+    }
 };
 </script>
+
+<style>
+    div.title {padding-left: 200px; padding-top: 300px;}
+    div.h1 { font-size: 100px };
+</style>
