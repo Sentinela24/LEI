@@ -1,5 +1,8 @@
 <template>
     <div>
+        <v-container fluid >
+        <v-row align="center" justify="center">
+        <v-col cols=3>
         <h1>Olá {{user.user.username}}!</h1>
         <h3>Lista de utilizadores:</h3>
         <em v-if="users.loading">A carregar utilizadores...</em>
@@ -15,11 +18,23 @@
         <p>
             <router-link to="/home">Logout</router-link>
         </p>
+        </v-col>
+        </v-row>
+        </v-container>
     </div>
 </template>
 
 <script>
-export default { 
+import { VContainer, VRow, VCol, VLayout } from 'vuetify/lib'
+
+export default {
+    components: {
+        VContainer,
+        VRow,
+        VCol,
+        VLayout,
+    },
+
     computed: {
         user () {
             return this.$store.state.authentication.user;

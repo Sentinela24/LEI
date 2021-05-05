@@ -1,12 +1,12 @@
 <template>
     <v-container fill-height fluid>
         <v-row align="center">
-            <v-col ml="1">
+            <v-col cols=8>
                 <div class="title">
                     <h1 class="blue--text display-3"> Gestor de CVs e ePortefolios </h1>
                     <p class="subheading"> O próximo passo na tua carreira... </p>
                     <v-row>
-                        <v-col>
+                        <v-col cols=1>
                             <v-btn to="/login" color="primary">
                                 LogIn
                             </v-btn>
@@ -20,8 +20,8 @@
                 </div>
             </v-col>
 
-            <v-col md="4" class="ml-auto">
-                <v-img
+            <v-col cols=4 class="ml-auto">
+                <v-img height="600"
                       src="https://picsum.photos/400/?random"
                       aspect-ratio="1.7"
                     ></v-img>
@@ -40,6 +40,11 @@ export default {
         VRow, 
         VContainer,
         VImg
+    },
+
+    created () {
+        // reset login status
+        this.$store.dispatch('authentication/logout');
     }
 };
 </script>

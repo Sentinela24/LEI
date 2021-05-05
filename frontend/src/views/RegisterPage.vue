@@ -1,5 +1,8 @@
 <template>
     <div>
+        <v-container fluid >
+        <v-row justify="center">
+        <v-col cols=4>
         <h2>Register</h2>
         <form @submit.prevent="handleSubmit">
             <div class="form-group">
@@ -23,13 +26,24 @@
                 <router-link to="/home" class="btn btn-link">Cancel</router-link>
             </div>
         </form>
+        </v-col>
+        </v-row>
+        </v-container>
     </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { VContainer, VRow, VCol, VLayout } from 'vuetify/lib'
 
 export default {
+    components : {
+        VContainer,
+        VRow,
+        VCol,
+        VLayout
+    },
+
     data () {
         return {
             user: {

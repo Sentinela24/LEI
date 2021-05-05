@@ -1,49 +1,12 @@
 <template>
     <div>
-        
-        <v-card>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant.sync="mini"
-      permanent
-    >
-      <v-list-item class="px-2">
-        <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-title>John Leider</v-list-item-title>
-
-        <v-btn
-          icon
-          @click.stop="mini = !mini"
-        >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-      </v-list-item>
-
-      <v-divider></v-divider>
-
-      <v-list dense>
-        <v-list-item
-          v-for="item in items"
-          :key="item.title"
-          link
-        >
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-  </v-card>
     
-
     
+      <NavBar/>
+
+        <v-container fluid >
+        <v-row justify="center">
+        <v-col cols=3>
         <h1>Perfil</h1>
         <div class="perfil">
             <ul v-if="user.params">
@@ -77,27 +40,26 @@
             </ul>
             <router-link to="/eportfolio" class="btn btn-link">Carregar aqui para criar um Eportfolio</router-link>
         </div>
-    </div>
 
+        </v-col>
+        </v-row>
+        </v-container>
+       
+    </div>
     
 </template>
 
 <script>
-import { VList, VIcon, VListItem, VListItemTitle, VCard, VNavigationDrawer, VListItemAvatar, VImg, VDivider, VListItemContent, VListItemIcon} from 'vuetify/lib'
+import { VContainer, VRow, VCol, VLayout } from 'vuetify/lib'
+import NavBar from '../components/NavBar'
 
 export default {
     components: {
-        VList,
-        VIcon,
-        VListItem,
-        VListItemTitle,
-        VCard, 
-        VNavigationDrawer,
-        VListItemAvatar, 
-        VImg,
-        VDivider, 
-        VListItemContent, 
-        VListItemIcon
+        VContainer,
+        VRow,
+        VCol,
+        VLayout,
+        NavBar
     },
 
     computed: {
@@ -106,6 +68,7 @@ export default {
         }
     },
 
+    /*
     data () {
       return {
         drawer: true,
@@ -117,6 +80,7 @@ export default {
         mini: true,
       }
     },
+    */
 
     /*
     beforeRouteEnter (to, from, next) {
