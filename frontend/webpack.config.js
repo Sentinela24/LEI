@@ -1,5 +1,7 @@
 var path = require('path');
+var WebpackExtensionManifestPlugin = require('webpack-extension-manifest-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var package_ = require('./package.json');
 
 module.exports = {
     mode: 'development',
@@ -58,9 +60,18 @@ module.exports = {
             }
         ]
     },
-    plugins: [new HtmlWebpackPlugin({
-        template: './src/index.html'
-    })],
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/index.html'
+        }),
+        new WebpackExtensionManifestPlugin({
+            config: {
+                base: {name: 'my manifest' },
+                extend: {version: package_.version}
+            }
+        })
+    ],
+
     devServer: {
         historyApiFallback: true,
     },
@@ -68,6 +79,7 @@ module.exports = {
         // global app config object
         config: JSON.stringify({
             apiUrl: 'http://localhost:1337'
-        })
+        }),
+        
     }
 }

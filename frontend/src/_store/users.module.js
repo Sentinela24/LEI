@@ -30,12 +30,9 @@ export const users = {
                 );
         },
         putEportfolio({ dispatch, commit }, { eportfolio, user }) {
-            //commit('getUserRequest', user.id );
-            
             var u
             userService.getById(user.id)
                 .then(
-
                     s => u = s,
                     error => {
                         commit('getUserFailure', error);
@@ -46,12 +43,9 @@ export const users = {
             userService.create_eport(eportfolio)
                 .then(
                     eport => {
-                        
-                        console.log("UUSEERR: " + JSON.stringify(u))
                         userService.updateUser( u, eport)
                             .then(
                                 user => {
-                                    console.log("user: " + JSON.stringify(user))
                                     commit('getUserSuccess', user),
 
                                     router.go(-1);
@@ -71,8 +65,6 @@ export const users = {
                         dispatch('alert/error', error, { root: true });
                     }
                 );
-            //console.log("id: " + id_user);
-            //console.log("eportfolio: " +  this.eportfolio );
         },
     },
     mutations: {
@@ -101,7 +93,7 @@ export const users = {
             state.eportfolio = { params: eportfolio };
         },
         putEportfolioFailure(state, error) {
-            state.status = { };
+            state.status = { error };
         }
     }
 }

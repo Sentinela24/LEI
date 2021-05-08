@@ -6,16 +6,17 @@
       permanent
     >
       <v-list-item class="px-2">
-        <v-list-item-avatar v-if="user.params.eportfolios.length">
+        <v-list-item-avatar v-if="user.user.eportfolios.length && user.user.eportfolios.avatar != null" >
+
             <v-img :src="image"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-avatar v-else>          
-            <v-img src="http://localhost:1337/uploads/default_02de446a72.jpg"></v-img>
+            <v-img src="http://localhost:1337/uploads/user_icon_aaaea38ffd.png"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title v-if="user.params.eportfolios.length">
-            {{ user.params.eportfolios[0].nome }}
+        <v-list-item-title v-if="user.user.eportfolios.length">
+            {{ user.user.eportfolios[0].nome }}
         </v-list-item-title>
 
         <v-list-item-title v-else>
@@ -72,11 +73,12 @@ export default {
     
     computed: {
         user () {
-            return this.$store.state.users.user;
+            console.log("NavBar: " + JSON.stringify(this.$store.state.authentication.user));
+            return this.$store.state.authentication.user;
         },
 
         image : function () {
-            return this.user.params.eportfolios[0].avatar.url.split('/uploads/').join(`${this.strapi_url}/uploads/`);
+            return this.user.user.eportfolios[0].avatar.url.split('/uploads/').join(`${this.strapi_url}/uploads/`);
             //return 'http://localhost:1337/uploads/5859205_0_d076e0d6a8.jpg'
         }
     },

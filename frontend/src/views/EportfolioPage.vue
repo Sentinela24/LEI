@@ -85,7 +85,7 @@ export default {
         }
     },
 
-    computed: {
+    computed: { 
         ...mapState('authentication', ['status'])
     },
     
@@ -104,7 +104,6 @@ export default {
 
                     for (let i = 0; i < formElements.length; i++) {
                         const currentElement = formElements[i];
-                        //console.log(currentElement)
                         if (!['submit', 'file'].includes(currentElement.type)) {
                             if('radio'.includes(currentElement.type)){
                                 if(currentElement.checked)
@@ -130,12 +129,6 @@ export default {
 
                     formData.append('data', JSON.stringify(data));
 
-                    /*
-                    formData.forEach(element => {
-                        console.log(element)
-                    })
-                    */
-                   
                     this.$store.dispatch('users/putEportfolio', { eportfolio: formData, user : this.$store.state.authentication.user.user })
                 }
             });

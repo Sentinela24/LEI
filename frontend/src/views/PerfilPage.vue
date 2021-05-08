@@ -1,24 +1,21 @@
 <template>
     <div>
-    
-    
       <NavBar/>
-
         <v-container fluid >
         <v-row justify="center">
         <v-col cols=3>
         <h1>Perfil</h1>
         <div class="perfil">
-            <ul v-if="user.params">
-                <span>Nome: {{user.params.username}}</span>
+            <ul v-if="user.user">
+                <span>Nome: {{user.user.username}}</span>
                 <br/>
-                <span>Email: {{user.params.email}}</span>
+                <span>Email: {{user.user.email}}</span>
             </ul>
         </div>
         <h1>Eportfolio</h1>
         <div class="eportfolio">
-            <ul v-if="user.params.eportfolios.length">
-                <li v-for="eport in user.params.eportfolios" :key="eport.id">
+            <ul v-if="user.user.eportfolios.length">
+                <li v-for="eport in user.user.eportfolios" :key="eport.id">
                     <span>Nome: {{eport.nome}}</span>
                      <br/>
                     <span>Género: {{eport.genero}}</span>
@@ -35,10 +32,9 @@
                 </li>
             </ul>
             <ul v-else>
-                <span>Ainda não tem um Eportfolio criado...</span>
-                <!-- <a :href = "$router.resolve('/eportfolio')">Carregar aqui para criar um Eportfolio </a> -->
+                <span>Ainda não tem um Eportfolio criado.</span>
             </ul>
-            <router-link to="/eportfolio" class="btn btn-link">Carregar aqui para criar um Eportfolio</router-link>
+            <router-link to="/criar-eportfolio" class="btn btn-link">Carregar aqui para criar um Eportfolio</router-link>
         </div>
 
         </v-col>
@@ -64,56 +60,10 @@ export default {
 
     computed: {
         user () {
-            return this.$store.state.users.user;
-        }
-    },
+            return this.$store.state.authentication.user;
 
-    /*
-    data () {
-      return {
-        drawer: true,
-        items: [
-          { title: 'Home', icon: 'mdi-home-city' },
-          { title: 'My Account', icon: 'mdi-account' },
-          { title: 'Users', icon: 'mdi-account-multiple' },
-        ],
-        mini: true,
-      }
-    },
-    */
-
-    /*
-    beforeRouteEnter (to, from, next) {
-
-        next(vm => vm.setData(err, user))
-        this.$store.dispatch('users/getUser', to.params.id)
-        console.log(user)
-    },
-    */
-
-    beforeRouteUpdate (to, from, next) {
-        this.user = null
-        
-        this.init()
-        console.log(user)
-        next()
-
-    },
-
-    created () {
-        this.init();
-    },
-
-    methods: {
-        init() {
-            let href = this.$route.path.split('/');
-            console.log(href);
-            var user_id;
-            if (href.length == 3){
-                user_id = href[2];
-            }
-            this.$store.dispatch('users/getUser', {id:user_id});
         }
     }
+    
 }
 </script>

@@ -3,17 +3,17 @@
         <v-row align="center">
             <v-col cols=8>
                 <div class="title">
-                    <h1 class="blue--text display-3"> Gestor de CVs e ePortefolios </h1>
-                    <p class="subheading"> O próximo passo na tua carreira... </p>
+                    <h1 class="blue--text display-3"> Gestor Minhopass </h1>
+                    <p class="subheading"> O próximo passo na tua carreira </p>
                     <v-row>
                         <v-col cols=1>
                             <v-btn to="/login" color="primary">
-                                LogIn
+                                Login
                             </v-btn>
                         </v-col>
                         <v-col>
                             <v-btn to="/register" color="primary">
-                                Register
+                                Registar
                             </v-btn>
                         </v-col>
                     </v-row>

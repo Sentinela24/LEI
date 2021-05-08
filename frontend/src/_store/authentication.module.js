@@ -17,8 +17,12 @@ export const authentication = {
                 .then(
                     user => {
                         commit('loginSuccess', user);
-                        router.push('/users').catch((erro) => {
-                            console.log(erro)});
+                        if(user.user.eportfolios.length)
+                            router.push('/eportfolio')
+                                  .catch((erro) => {console.log(erro)});
+                        else
+                            router.push('/criar')
+                                  .catch((erro) => {console.log(erro)});
                         
                     },
                     error => {
@@ -51,6 +55,17 @@ export const authentication = {
                         dispatch('alert/error', error, { root: true });
                     }
                 );
+        },
+        getUser({ commit }, { id }) {
+            commit('getUserRequest', { id });
+
+            userService.getById(id)
+                .then(
+                    user => {
+                        commit('getUserSuccess', user)
+                    },
+                    error => commit('getUserFailure', error)
+                );
         }
     },
     mutations: {
@@ -78,6 +93,15 @@ export const authentication = {
         },
         registerFailure(state, error) {
             state.status = {};
+        },
+        getUserRequest(state, id) {
+            state.user = { loading: true };
+        },
+        getUserSuccess(state, user) {
+            state.user = { params: user };
+        },
+        getUserFailure(state, error) {
+            state.user = { error };
         }
     }
 }
