@@ -3,8 +3,7 @@
     <v-navigation-drawer app clipped
       v-model="drawer"
       :mini-variant.sync="mini"
-      permanent
-    >
+      permanent>
       <v-list-item class="px-2">
         <v-list-item-avatar v-if="user.user.eportfolios.length && user.user.eportfolios.avatar != null" >
 
@@ -73,7 +72,6 @@ export default {
     
     computed: {
         user () {
-            console.log("NavBar: " + JSON.stringify(this.$store.state.authentication.user));
             return this.$store.state.authentication.user;
         },
 
