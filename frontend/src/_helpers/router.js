@@ -8,6 +8,8 @@ import RegisterPage from '../views/RegisterPage'
 import PerfilPage from '../views/PerfilPage'
 import EportfolioPage from '../views/EportfolioPage'
 import CreatePage from '../views/CreatePage'
+import EditPerfilPage from '../views/EditPerfilPage'
+import EditEportPage from '../views/EditEportPage'
 
 Vue.use(Router);
 
@@ -21,6 +23,8 @@ export const router = new Router({
     { path: '/users/:userId', name: 'users', component: PerfilPage },
     { path: '/criar-eportfolio', component: EportfolioPage },
     { path: '/criar', component: CreatePage },
+    { path: '/editar-perfil', component: EditPerfilPage },
+    { path: '/editar-eportefolio', component: EditEportPage },
 
     // otherwise redirect to home
     { path: '*', redirect: '/eportfolio' }

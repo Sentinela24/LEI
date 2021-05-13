@@ -10,7 +10,9 @@ export const userService = {
     getAll,
     getById,
     create_eport,
-    updateUser
+    updateUser,
+    deleteEportUser,
+    removeEport
 };
 
 function login(identifier, password) {
@@ -78,31 +80,17 @@ function create_eport(eportfolio) {
 }
 
 function updateUser(user, eportfolio){
-    console.log("id: " + JSON.stringify(user))
-    //console.log("eportfolio: " + eportfolio.id);
-
-    //console.log("eport" + eportfolio.id)
 
     var eports
     
     if (typeof user.eportfolios === 'undefined'){
-        //console.log(JSON.stringify(eportfolio))
-        console.log("bbbbbbbbbbbbbbb" + user.eportfolios)
-
         eports = '{"eportfolios" : [' + JSON.stringify(eportfolio) + ']}'
-
     }
+
     else {
-        console.log("aaaaaaaaaaaaaaaaa" + JSON.stringify(user.eportfolios))
-
         user['eportfolios'].push({"_id" : eportfolio.id})
-
         eports = '{"eportfolios" :' + JSON.stringify(user.eportfolios) + '}'
-
     }
-
-
-    console.log("eports: " + eports)
 
     const requestOptions = {
         method: 'PUT',
@@ -111,6 +99,32 @@ function updateUser(user, eportfolio){
     };
 
     return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(handleResponse);
+}
+
+function deleteEportUser(user){
+    var eports
+    console.log(user.eportfolios)
+
+    user['eportfolios'].shift()
+    eports = '{"eportfolios" :' + JSON.stringify(user.eportfolios) + '}'
+
+    const requestOptions = {
+        method: 'PUT',
+        headers: special_authHeader(),
+        body: eports
+    };
+    
+    return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(handleResponse);
+}
+
+function removeEport(eport){
+
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeader(),
+    };
+
+    return fetch(`${config.apiUrl}/eportfolios/${eport.id}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

@@ -30,6 +30,8 @@ export const users = {
                 );
         },
         putEportfolio({ dispatch, commit }, { eportfolio, user }) {
+            commit('putEportfolioRequest');
+
             var u
             userService.getById(user.id)
                 .then(
@@ -66,6 +68,39 @@ export const users = {
                     }
                 );
         },
+
+        deleteEport({ dispatch, commit }, { user }) {
+            commit('putEportfolioRequest');
+
+            var eport = user.eportfolios[0]
+
+            userService.deleteEportUser(user)
+                .then(
+                    u => {
+                        //commit('getUserSuccess', u);
+
+                        userService.removeEport( eport )
+                            .then(
+                                e => {
+                                    commit('putEportfolioSuccess', e),
+
+                                    setTimeout(() => {
+                                        // display success message after route change completes
+                                        dispatch('alert/success', 'Eportfolio removido', { root: true });
+                                    })
+                                },
+                                error => {
+                                    commit('putEportfolioFailure', error);
+                                    dispatch('alert/error', error, { root: true });
+                                }
+                            )
+                    },
+                    error => {
+                        commit('getUserFailure', error);
+                        dispatch('alert/error', error, { root: true });
+                    }
+                );
+        }
     },
     mutations: {
         getAllRequest(state) {
@@ -86,7 +121,7 @@ export const users = {
         getUserFailure(state, error) {
             state.user = { error };
         },
-        putEportfolioRequest(state, eportfolio) {
+        putEportfolioRequest(state) {
             state.eportfolio = { registering: true };
         },
         putEportfolioSuccess(state, eportfolio) {
