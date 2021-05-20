@@ -4,7 +4,7 @@
       :mini-variant.sync="mini"
       permanent fixed>
       <v-list-item class="px-2 mb-n2">
-        <v-list-item-avatar v-if="user.user.eportfolios.length && user.user.eportfolios.avatar != null" >
+        <v-list-item-avatar v-if="user.params.eportfolios.length && user.params.eportfolios[0].avatar != null" >
             <v-img :src="image"></v-img>
         </v-list-item-avatar>
 
@@ -12,8 +12,8 @@
             <v-img src="http://localhost:1337/uploads/user_icon_aaaea38ffd.png"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title class="indigo--text mt-3" v-if="user.user.eportfolios.length">
-            <h4>{{ user.user.eportfolios[0].nome }}</h4>
+        <v-list-item-title class="indigo--text mt-3" v-if="user.params.eportfolios.length">
+            <h4>{{ user.params.eportfolios[0].nome }}</h4>
         </v-list-item-title>
 
         <v-list-item-title class="indigo--text mt-3" v-else>
@@ -70,11 +70,11 @@ export default {
     
     computed: {
         user () {
-            return this.$store.state.authentication.user;
+            return this.$store.state.users.user;
         },
 
         image : function () {
-            return this.user.user.eportfolios[0].avatar.url.split('/uploads/').join(`${this.strapi_url}/uploads/`);
+            return this.user.params.eportfolios[0].avatar.url.split('/uploads/').join(`${this.strapi_url}/uploads/`);
             //return 'http://localhost:1337/uploads/5859205_0_d076e0d6a8.jpg'
         }
     },

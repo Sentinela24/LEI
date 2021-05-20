@@ -10,9 +10,11 @@ export const userService = {
     getAll,
     getById,
     create_eport,
+    updateEport,
     updateUser,
     deleteEportUser,
-    removeEport
+    removeEport,
+    editUser
 };
 
 function login(identifier, password) {
@@ -70,6 +72,8 @@ function getById(id) {
 
 function create_eport(eportfolio) {
     
+    console.log("TAMBÉM CHEGOU AQUI")
+    console.log("eport_create: " + JSON.stringify(eportfolio))
     const requestOptions = {
         method: 'POST',
         headers: authHeader(),
@@ -77,6 +81,20 @@ function create_eport(eportfolio) {
     };
 
     return fetch(`${config.apiUrl}/eportfolios`, requestOptions).then(handleResponse);
+}
+
+function updateEport(eportfolio, id_eport) {
+    
+    console.log("CHEGOU AQUI")
+    console.log("eport_id: " + JSON.stringify(id_eport))
+
+    const requestOptions = {
+        method: 'PUT',
+        headers: authHeader(),
+        body: eportfolio
+    };
+
+    return fetch(`${config.apiUrl}/eportfolios/${id_eport}`, requestOptions).then(handleResponse);
 }
 
 function updateUser(user, eportfolio){
@@ -127,6 +145,20 @@ function removeEport(eport){
     return fetch(`${config.apiUrl}/eportfolios/${eport.id}`, requestOptions).then(handleResponse);
 }
 
+function editUser(password, id){
+
+    console.log("pass: " + password)
+    console.log("id: " + id)
+
+    const requestOptions = {
+        method: 'PUT',
+        headers: special_authHeader(),
+        body: JSON.stringify(password)
+    };
+
+    return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
+
+}
 function handleResponse(response) {
     return response.text().then(text => {
         const data = text && JSON.parse(text);

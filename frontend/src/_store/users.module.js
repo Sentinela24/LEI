@@ -34,6 +34,8 @@ export const users = {
         },
         putEportfolio({ dispatch, commit }, { eportfolio, user }) {
             commit('putEportfolioRequest');
+            
+            console.log("eport: " + JSON.stringify(eportfolio))
 
             userService.create_eport(eportfolio)
                 .then(
@@ -60,6 +62,38 @@ export const users = {
                         dispatch('alert/error', error, { root: true });
                     }
                 );
+        },
+
+        editEportfolio({ dispatch, commit }, { eportfolio, user }) {
+            commit('putEportfolioRequest');
+            console.log("eport: " + JSON.stringify(eportfolio))
+
+                userService.updateEport(eportfolio, user.eportfolios[0].id)
+                    .then(
+                        eport => {
+
+                            userService.getById( user.id )
+                                .then(
+                                    u => {
+                                        commit('getUserSuccess', u),
+
+                                        router.push('/eportfolio');
+                                        setTimeout(() => {
+                                            // display success message after route change completes
+                                            dispatch('alert/success', 'Eportfolio editado', { root: true });
+                                        })
+                                    },
+                                    error => {
+                                        commit('getUserFailure', error);
+                                        dispatch('alert/error', error, { root: true });
+                                    }
+                                )
+                        },
+                        error => {
+                            commit('getUserFailure', error);
+                            dispatch('alert/error', error, { root: true });
+                        }
+                    );
         },
 
         deleteEport({ dispatch, commit }, { user }) {
@@ -96,7 +130,28 @@ export const users = {
                     }
                 );
             })
-        }
+        },
+
+        editPerfil({ dispatch, commit }, { password, user }){
+            commit('getUserRequest', { user });
+
+            userService.editUser(password, user.id)
+                .then(
+                    user => {
+                        commit('getUserSuccess', user),
+
+                        router.push('/eportfolio');
+                        setTimeout(() => {
+                            // display success message after route change completes
+                            dispatch('alert/success', 'Password editada', { root: true })
+                        })
+                    },
+                    error => {
+                        commit('getUserFailure', error)
+                        dispatch('alert/error', error, { root: true })
+                    }
+                );
+        }  
     },
     mutations: {
         getAllRequest(state) {
