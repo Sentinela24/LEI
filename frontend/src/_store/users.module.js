@@ -19,38 +19,31 @@ export const users = {
                 );
         },
         getUser({ commit }, { id }) {
+            return new Promise(resolve => {
             commit('getUserRequest', { id });
 
             userService.getById(id)
                 .then(
                     user => {
-                        commit('getUserSuccess', user)
+                        commit('getUserSuccess', user),
+                        resolve();
                     },
                     error => commit('getUserFailure', error)
                 );
+            })   
         },
         putEportfolio({ dispatch, commit }, { eportfolio, user }) {
             commit('putEportfolioRequest');
 
-            var u
-            userService.getById(user.id)
-                .then(
-                    s => u = s,
-                    error => {
-                        commit('getUserFailure', error);
-                        dispatch('alert/error', error, { root: true });
-                    }
-                )
-
             userService.create_eport(eportfolio)
                 .then(
                     eport => {
-                        userService.updateUser( u, eport)
+                        userService.updateUser( user, eport)
                             .then(
-                                user => {
-                                    commit('getUserSuccess', user),
+                                u => {
+                                    commit('getUserSuccess', u),
 
-                                    router.go(-1);
+                                    router.push('/eportfolio');
                                     setTimeout(() => {
                                         // display success message after route change completes
                                         dispatch('alert/success', 'Eportfolio adicionado', { root: true });
@@ -70,6 +63,7 @@ export const users = {
         },
 
         deleteEport({ dispatch, commit }, { user }) {
+            return new Promise(resolve => {
             commit('putEportfolioRequest');
 
             var eport = user.eportfolios[0]
@@ -78,16 +72,17 @@ export const users = {
                 .then(
                     u => {
                         //commit('getUserSuccess', u);
-
                         userService.removeEport( eport )
                             .then(
                                 e => {
-                                    commit('putEportfolioSuccess', e),
-
+                                    console.log("Novo user: " + u)
+                                    commit('putEportfolioSuccess', u)
+                                
                                     setTimeout(() => {
-                                        // display success message after route change completes
-                                        dispatch('alert/success', 'Eportfolio removido', { root: true });
+                                      // display success message after route change completes
+                                      dispatch('alert/success', 'Eportfolio removido', { root: true });
                                     })
+                                    resolve()
                                 },
                                 error => {
                                     commit('putEportfolioFailure', error);
@@ -100,6 +95,7 @@ export const users = {
                         dispatch('alert/error', error, { root: true });
                     }
                 );
+            })
         }
     },
     mutations: {
@@ -113,7 +109,6 @@ export const users = {
             state.all = { error };
         },
         getUserRequest(state, id) {
-            state.user = { loading: true };
         },
         getUserSuccess(state, user) {
             state.user = { params: user };
@@ -122,13 +117,13 @@ export const users = {
             state.user = { error };
         },
         putEportfolioRequest(state) {
-            state.eportfolio = { registering: true };
+            state.user = { loading: true };
         },
-        putEportfolioSuccess(state, eportfolio) {
-            state.eportfolio = { params: eportfolio };
+        putEportfolioSuccess(state, user) {
+            state.user = { params: user };
         },
         putEportfolioFailure(state, error) {
-            state.status = { error };
+            state.user = { error };
         }
     }
 }

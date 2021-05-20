@@ -11,25 +11,22 @@ export const authentication = {
     state: initialState,
     actions: {
         login({ dispatch, commit }, { identifier, password }) {
-            commit('loginRequest', { identifier });
+            return new Promise(resolve => {
+                commit('loginRequest', { identifier });
 
-            userService.login(identifier, password)
-                .then(
-                    user => {
-                        commit('loginSuccess', user);
-                        if(user.user.eportfolios.length)
-                            router.push('/eportfolio')
-                                  .catch((erro) => {console.log(erro)});
-                        else
-                            router.push('/criar')
-                                  .catch((erro) => {console.log(erro)});
-                        
-                    },
-                    error => {
-                        commit('loginFailure', error);
-                        dispatch('alert/error', error, { root: true });
-                    }
-                );
+                userService.login(identifier, password)
+                    .then(
+                        u => {
+                            commit('loginSuccess', u);
+                            resolve();
+                            
+                        },
+                        error => {
+                            commit('loginFailure', error);
+                            dispatch('alert/error', error, { root: true });
+                        }
+                    );
+            });
         },
         
         logout({ commit }) {
@@ -82,7 +79,7 @@ export const authentication = {
             state.user = null;
         },
         logout(state) {
-            state.status = {};
+            state.status = {}; 
             state.user = null;
         },
         registerRequest(state, user) {

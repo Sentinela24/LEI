@@ -8,7 +8,7 @@
                     max-width="40"
                     contain
                 ></v-img>
-            <div v-if="current_route != '/home'">
+            <div v-if="current_route != '/home' && current_route != '/eportfolio'">
                 <v-toolbar-title class="text-no-wrap text-h5" style="cursor: pointer" @click="$router.push('/home')" > 
                     <span> Minhopass </span>
                 </v-toolbar-title>
@@ -30,7 +30,7 @@
             </v-btn>
 
             <div v-if="current_route != '/login' && current_route != '/home' && current_route != '/register'">
-                <v-btn text to="/home" class="indigo">
+                <v-btn text @click="handle_logout" class="indigo">
                     <span> Logout </span>  
                 </v-btn>
             </div>
@@ -40,7 +40,7 @@
             <div v-if="alert.message" :class="`alert ${alert.type}`">{{alert.message}}</div>
             <router-view></router-view>
         </v-main>
-        <v-footer app dark padless absolute fixed>
+        <v-footer app dark padless fixed>
             <v-card text tile class="indigo white--text text-center" width="100%">
             <v-card-text>
                 <v-btn href="https://github.com/Sentinela24/LEI" target="_blank" class="mx-4 white--text" icon >
@@ -88,6 +88,14 @@ export default {
             this.current_route = to.path
         }
 
+    },
+
+    methods:{
+        handle_logout(){
+            // reset login status
+            this.$store.dispatch('authentication/logout')
+                .then(this.$router.push("/home"));
+        }
     },
 
     components: {

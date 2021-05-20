@@ -1,7 +1,5 @@
 var path = require('path');
-var WebpackExtensionManifestPlugin = require('webpack-extension-manifest-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var package_ = require('./package.json');
 
 module.exports = {
     mode: 'development',
@@ -29,7 +27,12 @@ module.exports = {
             {
                 test: /\.js?$/,
                 exclude: /(node_modules)/,
-                use: 'babel-loader'
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                      presets: ['@babel/preset-env']
+                    }
+                  }
             },
             {
                 test: /\.css?$/,
@@ -60,15 +63,10 @@ module.exports = {
             }
         ]
     },
+
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html'
-        }),
-        new WebpackExtensionManifestPlugin({
-            config: {
-                base: {name: 'my manifest' },
-                extend: {version: package_.version}
-            }
         })
     ],
 

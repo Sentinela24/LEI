@@ -52,11 +52,19 @@ export default {
     },
 
     methods: {
-        handleSubmit:function (e) {
+        async handleSubmit() {
             this.submitted = true;
             const { identifier, password } = this;
             if (identifier && password) {
-                this.$store.dispatch('authentication/login', { identifier, password });
+                await this.$store.dispatch('authentication/login', { identifier, password });
+                await this.$store.dispatch('users/getUser', {id : this.$store.state.authentication.user.user.id});
+                if(this.$store.state.users.user.params.eportfolios.length)
+                                this.$router.push('/eportfolio')
+                                    .catch((erro) => {console.log(erro)});
+                            else
+                                this.$router.push('/criar')
+                                    .catch((erro) => {console.log(erro)});
+                            
             }
         }
     }

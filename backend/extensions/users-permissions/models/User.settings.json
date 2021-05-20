@@ -60,8 +60,19 @@
       "configurable": false
     },
     "eportfolios": {
-      "via": "user",
-      "collection": "eportfolio"
+      "collection": "eportfolio",
+      "via": "user"
+    },
+    "avatar": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
     }
   }
 }

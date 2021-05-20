@@ -1,12 +1,10 @@
 <template>
-    <v-card>
-    <v-navigation-drawer app clipped
+    <v-navigation-drawer app clipped class="indigo lighten-5"
       v-model="drawer"
       :mini-variant.sync="mini"
-      permanent>
-      <v-list-item class="px-2">
+      permanent fixed>
+      <v-list-item class="px-2 mb-n2">
         <v-list-item-avatar v-if="user.user.eportfolios.length && user.user.eportfolios.avatar != null" >
-
             <v-img :src="image"></v-img>
         </v-list-item-avatar>
 
@@ -14,19 +12,20 @@
             <v-img src="http://localhost:1337/uploads/user_icon_aaaea38ffd.png"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title v-if="user.user.eportfolios.length">
-            {{ user.user.eportfolios[0].nome }}
+        <v-list-item-title class="indigo--text mt-3" v-if="user.user.eportfolios.length">
+            <h4>{{ user.user.eportfolios[0].nome }}</h4>
         </v-list-item-title>
 
-        <v-list-item-title v-else>
-            Utilizador
+        <v-list-item-title class="indigo--text mt-3" v-else>
+            <h4>Utilizador</h4>
         </v-list-item-title>
 
         <v-btn
+          class="indigo--text"
           icon
           @click.stop="mini = !mini"
         >
-          <v-icon>mdi-chevron-left</v-icon>
+          <v-icon class="indigo--text" size="30">mdi-chevron-left</v-icon>
         </v-btn>
       </v-list-item>
 
@@ -38,17 +37,16 @@
           :key="item.title"
           link
         >
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
+          <v-list-item-icon class="mr-5">
+            <v-icon class="indigo--text" size="30">{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title class="black--text"><h5>{{ item.title }}</h5></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-  </v-card>    
 </template>
 
 

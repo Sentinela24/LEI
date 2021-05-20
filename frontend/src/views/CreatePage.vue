@@ -1,9 +1,9 @@
 <template>
     <div>
-        <v-container fluid >
+        <v-container fluid  >
             <v-card
             :loading="loading"
-            class="mx-auto my-10"
+            class="mx-auto my-10 indigo lighten-5"
             max-width="374">
                 <template slot="progress">
                     <v-progress-linear
@@ -16,13 +16,13 @@
                     height="250"
                     src="http://localhost:1337/uploads/career_7914a3a967.jpg">
                 </v-img>
-                <v-card-title class="mb-n3">Bem vindo {{user.user.username}}</v-card-title>
-                <v-card-subtitle class="ml-0 my-n1">Ainda não tem um Eportfolio criado.</v-card-subtitle>
+                <v-card-title class="mb-n3 indigo--text"><h4>Bem vindo {{user.params.username}}</h4></v-card-title>
+                <v-card-subtitle class="ml-0 my-n1 black--text"><h5>Ainda não tem um Eportfolio criado.</h5></v-card-subtitle>
                 <v-divider class="mx-0 my-n2"></v-divider>
                 <v-card-actions>
                     <v-btn
                         to="/criar-eportfolio"
-                        color="deep-purple lighten-2"
+                        color="indigo"
                         text
                         @click="criar">
                         Criar
@@ -69,7 +69,7 @@ export default {
 
     computed: {
         user () {
-            return this.$store.state.authentication.user;
+            return this.$store.state.users.user;
         }
     }
     

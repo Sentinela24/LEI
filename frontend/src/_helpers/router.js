@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import { authentication } from '../_store';
 
 import HomePage from '../views/HomePage'
 import MyMinhoPassPage from '../views/MyMinhoPassPage'
@@ -27,7 +28,7 @@ export const router = new Router({
     { path: '/editar-eportefolio', component: EditEportPage },
 
     // otherwise redirect to home
-    { path: '*', redirect: '/eportfolio' }
+    { path: '*', redirect: '/home' }
   ]
 });
 
@@ -35,13 +36,16 @@ router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
   const publicPages = ['/login', '/register', '/home'];
   const authRequired = !publicPages.includes(to.path);
+  console.log(authRequired);
   const loggedIn = localStorage.getItem('user');
 
-  /*
   if (!authRequired && loggedIn) {
-    return next('/users/:userId');
+    return next('/eportfolio');
   }
-  */
+  
+  console.log(to.fullPath + " " + from.fullPath)
+  if((!authRequired || to.fullPath == '/eportfolio') && from.fullPath == '/criar' && authentication.user != null)
+    return next('/criar')
 
   if (authRequired && !loggedIn) {
     return next('/home');

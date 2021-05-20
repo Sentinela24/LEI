@@ -1,10 +1,10 @@
 <template>
     <div>
         <NavBar/>
-        <v-container fluid >
+        <v-container fluid>
             <v-card
             :loading="loading"
-            class="mx-auto my-10"
+            class="indigo lighten-5 mx-auto my-10"
             max-width="874">
                 <template slot="progress">
                     <v-progress-linear
@@ -13,124 +13,123 @@
                         indeterminate>
                     </v-progress-linear>
                 </template>
-                <v-toolbar
-                class="my-3 indigo white--text text-h1 display-3"
-          dark
-        >
-          <v-toolbar-title>
-              <h2>{{user.user.username}}</h2>
-          </v-toolbar-title>
+                <v-toolbar class="my-3 indigo white--text text-h1 display-3" dark>
+                  <v-toolbar-title>
+                      <h2>{{user.params.username}}</h2>
+                  </v-toolbar-title>
 
-          <v-spacer></v-spacer>
+                  <v-spacer></v-spacer>
 
-          <v-menu offset-y>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="indigo"
-                dark
-                text
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon color="white"> mdi-dots-vertical </v-icon> 
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item 
-                v-for="(item, index) in items"
-                :key="index"
-                @click="selectSection(index)"
-              >
-                <v-list-item-title :to= "item.path" >{{ item.title }}</v-list-item-title>
-                
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-toolbar>
-                
-                <v-card-title class="ml-0 my-n1"><h4>O meu ePortefolio</h4></v-card-title>
-                <v-divider class=" my-0" ></v-divider>
-                <v-list>
-          <v-list-item>
-            <v-list-item-action>
-              <v-icon>mdi-phone</v-icon>
-            </v-list-item-action>
-
-            <v-list-item-content>
-              <v-list-item-title>{{user.user.eportfolios[0].telemovel}}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider inset></v-divider>
-
-          <v-list-item>
-            <v-list-item-action>
-              <v-icon>mdi-account</v-icon>
-            </v-list-item-action>
-
-            <v-list-item-content>
-              <v-list-item-title>{{user.user.eportfolios[0].nome.substr(0, 10)}}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider inset></v-divider>
-
-          <v-list-item>
-            <v-list-item-action>
-              <v-icon>mdi-email</v-icon>
-            </v-list-item-action>
-
-            <v-list-item-content>
-              <v-list-item-title>{{user.user.eportfolios[0].email}}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider inset></v-divider>
-
-          <v-list-item>
-            <v-list-item-action>
-              <v-icon>mdi-map-marker</v-icon>
-            </v-list-item-action>
-
-            <v-list-item-content>
-              <v-list-item-title>{{user.user.eportfolios[0].nacionalidade}}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider inset></v-divider>
-
-          <v-list-item>
-            <v-list-item-action>
-              <v-icon>mdi-account-group</v-icon>
-            </v-list-item-action>
-
-            <v-list-item-content>
-              <v-list-item-title>{{user.user.eportfolios[0].genero}}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider inset></v-divider>
-
-          <v-list-item>
-            <v-list-item-action>
-              <v-icon>mdi-calendar</v-icon>
-            </v-list-item-action>
-
-            <v-list-item-content>
-              <v-list-item-title>{{user.user.eportfolios[0].data_nasc}}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-                <v-card-actions>
-                    <v-btn
-                        to="/criar-eportfolio"
-                        color="deep-purple lighten-2"
+                  <v-menu offset-y>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        color="indigo"
+                        dark
                         text
-                        @click="criar">
-                        Criar
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon color="white"> mdi-dots-vertical </v-icon> 
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item 
+                        v-for="(item, index) in items"
+                        :key="index"
+                        @click="selectSection(index)"
+                      >
+                        <v-list-item-title :to= "item.path" >{{ item.title }}</v-list-item-title>
+
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-toolbar>
+                
+                <v-card-title class="indigo lighten-5 ml-0 my-n1 indigo--text"><h4>O meu ePortefolio</h4></v-card-title>
+                
+                <v-divider class="my-0" ></v-divider>
+                
+                <v-list class="indigo lighten-5">
+                  <v-list-item class="mb-n4">
+                    <v-list-item-action>
+                      <v-icon color="indigo">mdi-phone</v-icon>
+                    </v-list-item-action>
+
+                    <v-list-item-content>
+                      <v-list-item-title><h5>{{user.params.eportfolios[0].telemovel}}</h5></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-divider inset></v-divider>
+
+                  <v-list-item class="mb-n4">
+                    <v-list-item-action>
+                      <v-icon color="indigo">mdi-account</v-icon>
+                    </v-list-item-action>
+
+                    <v-list-item-content>
+                      <v-list-item-title ><h5>{{user.params.eportfolios[0].nome.substr(0, 10)}}</h5></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-divider inset></v-divider>
+
+                  <v-list-item class="mb-n4">
+                    <v-list-item-action>
+                      <v-icon color="indigo">mdi-email</v-icon>
+                    </v-list-item-action>
+
+                    <v-list-item-content>
+                      <v-list-item-title><h5>{{user.params.eportfolios[0].email}}</h5></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-divider inset></v-divider>
+
+                  <v-list-item class="mb-n4">
+                    <v-list-item-action>
+                      <v-icon color="indigo">mdi-map-marker</v-icon>
+                    </v-list-item-action>
+
+                    <v-list-item-content>
+                      <v-list-item-title><h5>{{user.params.eportfolios[0].nacionalidade}}</h5></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-divider inset></v-divider>
+
+                  <v-list-item class="mb-n4">
+                    <v-list-item-action>
+                      <v-icon color="indigo">mdi-account-group</v-icon>
+                    </v-list-item-action>
+
+                    <v-list-item-content>
+                      <v-list-item-title><h5>{{user.params.eportfolios[0].genero}}</h5></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-divider inset></v-divider>
+
+                  <v-list-item class="mb-n4">
+                    <v-list-item-action>
+                      <v-icon color="indigo">mdi-calendar</v-icon>
+                    </v-list-item-action>
+
+                    <v-list-item-content>
+                      <v-list-item-title><h5>{{user.params.eportfolios[0].data_nasc}}</h5></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+                        <v-card-actions>
+                                    <v-btn
+                                        to="/criar-eportfolio"
+                                        color="deep-purple lighten-2"
+                                        text
+                                        @click="criar">
+                                        Criar
+                                    </v-btn>
+                        </v-card-actions>
+                    </v-card>
         </v-container>
         <v-container fluid >
             <v-row align="center" justify="center">
@@ -150,7 +149,7 @@
                     <span v-if="users.error" class="text-danger">ERROR: {{users.error}}</span>
                     <ul v-if="users.params">
                         <li v-for="user in users.params" :key="user.id">
-                            <router-link :to="$router.resolve({ name: 'users', params: { userId: user.id }}).href">{{user.username + ' ' + user.email}}</router-link>
+                            <router-link :to="$router.resolve({ name: 'users', params: { userId: user.id }}).href">{{user.paramsname + ' ' + user.email}}</router-link>
                         </li>
                     </ul>
                     <p>
@@ -163,7 +162,7 @@
 </template>
 
 <script>
-import { VContainer, VRow, VCol, VLayout, VImg, VCard, VCardText, VCardTitle, VCardSubtitle, VDivider, VCardActions, VProgressLinear, VList, VListItem, VListItemTitle,  VListItemAction, VListItemContent, VAppBarNavIcon, VToolbarTitle, VMenu, VSlot } from 'vuetify/lib'
+import { VContainer, VRow, VCol, VLayout, VImg, VCard, VCardText, VCardTitle, VCardSubtitle, VDivider, VCardActions, VProgressLinear, VList, VListItem, VListItemTitle,  VListItemAction, VListItemContent, VAppBarNavIcon, VToolbarTitle, VMenu } from 'vuetify/lib'
 import NavBar from '../components/NavBar'
 
 export default {
@@ -214,13 +213,13 @@ export default {
         VListItemContent,
         VToolbarTitle,
         VAppBarNavIcon,
-        VMenu,
-        VSlot
+        VMenu
     },
 
     computed: {
         user () {
-            return this.$store.state.authentication.user;
+          console.log("User: "+ JSON.stringify(this.$store.state.users.user));
+          return this.$store.state.users.user;
         },
         date() {
             //console.log(this.user.toISOString().substr(0, 10));
@@ -238,13 +237,15 @@ export default {
         setTimeout(() => (this.loading = false), 2000)
       },
 
-      selectSection(index) {
+      async selectSection(index) {
         if (this.items[index].path)
           this.items[index].click.call(this)
-        else {
-          this.$store.dispatch('users/deleteEport', {user : this.user.user})
+        else{
+          await this.$store.dispatch('users/deleteEport', {user : this.user.params});
+          if(this.user.params.eportfolios.length == 0)
+            this.$router.push("/criar");
         }
-      }
+          }
     },
 
     created () {
