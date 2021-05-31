@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import { authentication } from '../_store';
+import { authentication } from '../_store/authentication.module';
 
 import HomePage from '../views/HomePage'
 import MyMinhoPassPage from '../views/MyMinhoPassPage'
@@ -11,6 +11,8 @@ import EportfolioPage from '../views/EportfolioPage'
 import CreatePage from '../views/CreatePage'
 import EditPerfilPage from '../views/EditPerfilPage'
 import EditEportPage from '../views/EditEportPage'
+import LibraryPage from '../views/LibraryPage'
+import FeedPage from '../views/FeedPage'
 
 Vue.use(Router);
 
@@ -26,7 +28,8 @@ export const router = new Router({
     { path: '/criar', component: CreatePage },
     { path: '/editar-perfil', component: EditPerfilPage },
     { path: '/editar-eportefolio', component: EditEportPage },
-
+    { path: '/biblioteca', component: LibraryPage },
+    { path: '/feed', component: FeedPage },
     // otherwise redirect to home
     { path: '*', redirect: '/home' }
   ]
@@ -39,13 +42,15 @@ router.beforeEach((to, from, next) => {
   console.log(authRequired);
   const loggedIn = localStorage.getItem('user');
 
-  if (!authRequired && loggedIn) {
+  if (!authRequired && loggedIn)
     return next('/eportfolio');
-  }
   
   console.log(to.fullPath + " " + from.fullPath)
   if((!authRequired || to.fullPath == '/eportfolio') && from.fullPath == '/criar' && authentication.user != null)
     return next('/criar')
+
+  if((!authRequired || to.fullPath == '/criar') && from.fullPath == '/eportfolio' && authentication.user != null)
+    return next('/eportfolio')  
 
   if (authRequired && !loggedIn) {
     return next('/home');

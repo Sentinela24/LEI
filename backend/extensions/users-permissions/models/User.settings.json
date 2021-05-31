@@ -63,13 +63,11 @@
       "collection": "eportfolio",
       "via": "user"
     },
-    "avatar": {
-      "model": "file",
+    "cvs": {
+      "collection": "file",
       "via": "related",
       "allowedTypes": [
-        "images",
-        "files",
-        "videos"
+        "files"
       ],
       "plugin": "upload",
       "required": false

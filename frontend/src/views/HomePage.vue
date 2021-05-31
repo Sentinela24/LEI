@@ -1,37 +1,24 @@
 <template>
-    <v-container fill-height fluid>
-        <v-row align="center">
-            <v-col cols=8>
-                <div class="title">
-                    <h1 class="blue--text display-3"> Gestor Minhopass </h1>
-                    <p class="subheading"> O próximo passo na tua carreira </p>
-                    <v-row>
-                        <v-col cols=1>
-                            <v-btn to="/login" color="primary">
+    <v-container fill-height :style="{backgroundImage: 'url(http://localhost:1337/uploads/desktop_2325627_1920_d50af40d6d.jpg)'}" fluid>
+        <v-row>
+            <v-col md="6" class="ml-auto">
+                <v-card class="py-2 px-3" elevation="10" color="rgb(237, 237, 237, 1)"  max-width="510px" >
+                    <h1 class="font-weight-normal indigo--text display-3  mt-2"> Gestor Minhopass </h1>
+                    <h5 class="mx-1"> O próximo passo na tua carreira </h5>
+                    <v-btn class="mx-1 mb-2" to="/login" dark color="indigo">
                                 Login
-                            </v-btn>
-                        </v-col>
-                        <v-col>
-                            <v-btn to="/register" color="primary">
-                                Registar
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-                </div>
-            </v-col>
-
-            <v-col cols=4 class="ml-auto">
-                <v-img height="600"
-                      src="https://picsum.photos/400/?random"
-                      aspect-ratio="1.7"
-                    ></v-img>
+                    </v-btn>
+                    <v-btn class="mb-2" to="/register" dark color="indigo" >
+                        Registar
+                    </v-btn>
+                </v-card>
             </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script>
-import { VCol, VRow, VContainer, VImg } from 'vuetify/lib'
+import { VCol, VRow, VContainer, VImg, VCard } from 'vuetify/lib'
 
 export default {
     
@@ -39,7 +26,8 @@ export default {
         VCol, 
         VRow, 
         VContainer,
-        VImg
+        VImg,
+        VCard
     },
 
     created () {
@@ -48,8 +36,3 @@ export default {
     }
 };
 </script>
-
-<style>
-    div.title {padding-left: 200px; padding-top: 300px;}
-    div.h1 { font-size: 100px };
-</style>

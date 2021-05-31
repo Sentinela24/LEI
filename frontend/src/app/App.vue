@@ -57,7 +57,10 @@
             <v-card-text class="white--text">
                 {{ new Date().getFullYear() }} — <strong>Gestor Minhopass</strong>
             </v-card-text>
+
+
             </v-card>
+
         </v-footer>
     </v-app>  
 </template>
@@ -95,7 +98,7 @@ export default {
             // reset login status
             this.$store.dispatch('authentication/logout')
                 .then(this.$router.push("/home"));
-        }
+        },
     },
 
     components: {

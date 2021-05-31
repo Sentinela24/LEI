@@ -31,18 +31,21 @@
                     <v-date-picker locale="pt-pt" :min="minDate" :max="maxDate" v-model="fromDateVal" no-title @input="fromDateMenu = false"></v-date-picker>
                 </v-menu>
                 <v-text-field v-model="eportfolio.telefone" prepend-icon="mdi-phone" :counter="9" :rules="phoneRules" label="Telefone"  name="telemovel" required></v-text-field>
-                <v-select v-model="eportfolio.nacionalidade" prepend-icon="mdi-flag" :items="paises" :rules="[v => !!v || 'Nacionalidade é requerida']" label="Nacionalidade"  name="nacionalidade" required></v-select>
+                <v-select v-model="eportfolio.nacionalidade" prepend-icon="mdi-flag" :items="countries" :rules="[v => !!v || 'Nacionalidade é requerida']" label="Nacionalidade"  name="nacionalidade" required></v-select>
                 <v-text-field v-model="eportfolio.profissao" prepend-icon="mdi-briefcase" label="Profissão" name="profissao" required></v-text-field>
         <!--    <v-checkbox v-model="checkbox" :rules="[v => !!v || 'You must agree to continue!']" label="Do you agree?" required></v-checkbox> -->
                 <v-btn :disabled="!valid" color="success" class="mr-4 mb-3" @click="validate">
-                  Validate
+                  Criar
                 </v-btn>
                 <v-btn color="error" class="mr-4 mb-3" @click="reset">
-                  Reset Form
+                  Reset
                 </v-btn>
-                <v-btn color="warning" @click="resetValidation" class="mb-3">
+                <v-btn class="mr-4 mb-3" @click="back">
+                  Voltar
+                </v-btn>
+        <!--        <v-btn color="warning" @click="resetValidation" class="mb-3">
                   Reset Validation
-                </v-btn>
+                </v-btn> -->
               </v-form>
               </v-card>
         
@@ -102,7 +105,6 @@
 <script>
 import { mapState } from 'vuex'
 import { VContainer, VRow, VCol, VLayout, VForm, VTextField, VSelect, VCheckbox, VFileInput, VCard, VCardTitle, VRadio, VRadioGroup, VDivider, VToolbarTitle, VMenu, VDatePicker} from 'vuetify/lib'
-import axios from 'axios';
 
 export default {
      components: {
@@ -150,13 +152,13 @@ export default {
               v => /.+@.+\..+/.test(v) || 'E-mail tem que ser válido',
             ],
             fileRules: [
-              value => !value || value.size < 2000000 || 'Tamanho da foto no máximo com 2 MB!',
+              value => !value || value.size < 1000000 || 'Tamanho da foto no máximo com 1 MB!',
             ],
             phoneRules: [
               v => !!v || 'Campo obrigatório',
               v => new RegExp("^(91|92|93|96|97)\\d{7}$").test(v) || 'Telefone tem que ser válido',
             ],
-            paises: undefined,
+            countries: [],
             checkbox: false,
             fromDateMenu: false,
             fromDateVal: null,
@@ -191,47 +193,6 @@ export default {
     },
     
     methods: {
-/*        handleSubmit(e) {
-            this.submitted = true;
-            this.$validator.validate().then(valid => {
-                if (valid) {
-                    const formElement = document.querySelector('form');
-                    const formData = new FormData();
-
-                    const formElements = formElement.elements;
-
-                    const data = {};
-
-                    for (let i = 0; i < formElements.length; i++) {
-                        const currentElement = formElements[i];
-                        if (!['submit', 'file'].includes(currentElement.type)) {
-                            if('radio'.includes(currentElement.type)){
-                                
-                                if(currentElement.checked)
-                                    data[currentElement.name] = currentElement.value;
-                            }
-                            else{
-                                data[currentElement.name] = currentElement.value;
-                            }
-
-                        } else if (currentElement.type === 'file') {
-                        if (currentElement.files.length === 1) {
-                            const file = currentElement.files[0];
-                            formData.append(`files.${currentElement.name}`, file, file.name);
-                        } else {
-                            for (let i = 0; i < currentElement.files.length; i++) {
-                                const file = currentElement.files[i];
-                                formData.append(`files.${currentElement.name}`, file, file.name);
-                            }
-                        }
-                      }
-                    } 
-                    formData.append('data', JSON.stringify(data));
-                    this.$store.dispatch('users/putEportfolio', { eportfolio: formData, user : this.$store.state.users.user.params })
-                }
-            });
-        }, */
-
         onFileSelected(e) {
             this.eportfolio.avatar = e
         },
@@ -246,7 +207,6 @@ export default {
 
                 for (let i = 0; i < formElements.length; i++) {
                     const currentElement = formElements[i];
-                    console.log(currentElement)
                     if (!['submit', 'file', 'button'].includes(currentElement.type)) {
                         if('radio'.includes(currentElement.type)){
                             if(currentElement.checked)
@@ -264,14 +224,12 @@ export default {
                         } else {
                             for (let i = 0; i < currentElement.files.length; i++) {
                                 const file = currentElement.files[i];
-
                                 formData.append(`files.${currentElement.name}`, file, file.name);
                             }
                         }
                   }
                 }
                 formData.append('data', JSON.stringify(data));
-                console.log("FormData: " + JSON.stringify(data))
                 this.$store.dispatch('users/putEportfolio', { eportfolio: formData, user : this.$store.state.users.user.params })
             }
         },
@@ -282,11 +240,13 @@ export default {
             this.$refs.form.resetValidation()
         },
 
+        back(){
+            this.$router.go(-1)
+        },
+
         fetchData() { 
-          axios.get('https://restcountries.eu/rest/v2/all')
-            .then((response) => {
-              this.paises = response.data.map(a => a.name)
-            });
+          var list = require("../_services/countries")
+          this.countries = list.map(a => a.nome)
         }
     }
 };

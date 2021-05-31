@@ -23,7 +23,7 @@ export const authentication = {
                         },
                         error => {
                             commit('loginFailure', error);
-                            dispatch('alert/error', error, { root: true });
+                            dispatch('alert/error', 'Dados inválidos!', { root: true });    
                         }
                     );
             });
@@ -44,12 +44,15 @@ export const authentication = {
                         router.push('/login');
                         setTimeout(() => {
                             // display success message after route change completes
-                            dispatch('alert/success', 'Registration successful', { root: true });
+                            dispatch('alert/success', 'Registro efetuado com sucesso', { root: true });
                         })
                     },
                     error => {
                         commit('registerFailure', error);
-                        dispatch('alert/error', error, { root: true });
+                        if(error[0].messages[0].message.localeCompare("Email already taken") == 0)
+                            dispatch('alert/error', 'Username já utilizado', { root: true });
+                        else   
+                            dispatch('alert/error', 'Email já utilizado', { root: true });
                     }
                 );
         },

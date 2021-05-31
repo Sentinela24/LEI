@@ -20,11 +20,7 @@
             <h4>Utilizador</h4>
         </v-list-item-title>
 
-        <v-btn
-          class="indigo--text"
-          icon
-          @click.stop="mini = !mini"
-        >
+        <v-btn class="indigo--text" icon @click.stop="mini = !mini">
           <v-icon class="indigo--text" size="30">mdi-chevron-left</v-icon>
         </v-btn>
       </v-list-item>
@@ -32,17 +28,13 @@
       <v-divider></v-divider>
 
       <v-list dense>
-        <v-list-item
-          v-for="item in items"
-          :key="item.title"
-          link
-        >
+        <v-list-item v-for="item in items" :key="item.title" link>
           <v-list-item-icon class="mr-5">
             <v-icon class="indigo--text" size="30">{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
-          <v-list-item-content>
-            <v-list-item-title class="black--text"><h5>{{ item.title }}</h5></v-list-item-title>
+          <v-list-item-content >
+            <v-list-item-title><router-link :to="item.to" tag="li"><h5>{{ item.title }}</h5></router-link></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -83,9 +75,9 @@ export default {
       return {
         drawer: true,
         items: [
-          { title: 'Feed', icon: 'mdi-home-city' },
-          { title: 'Biblioteca', icon: 'mdi-account' },
-          { title: 'ePortefolio', icon: 'mdi-account-multiple' },
+          { title: 'ePortefolio', icon: 'mdi-clipboard-account', to: '/eportfolio'},
+          { title: 'Biblioteca', icon: 'mdi-book-open-variant', to: '/biblioteca'},
+          { title: 'Feed', icon: 'mdi-bell', to:'/feed' },
         ],
         mini: true,
         strapi_url: 'http://localhost:1337'
@@ -93,3 +85,11 @@ export default {
     }
 }
 </script>   
+<style scoped>
+  v-list li:hover,
+    nav li.router-link-active,
+    nav li.router-link-exact-active {
+      color:rgb(63, 81, 181);
+      cursor: pointer;
+  }
+</style>

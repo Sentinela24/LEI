@@ -9,21 +9,17 @@
                 </template>
                 <v-toolbar class="my-3 indigo white--text text-h1 display-3" dark>
                   <v-toolbar-title>
-                      <h2>Editar Perfil</h2>
+                      <h2>Editar Conta</h2>
                   </v-toolbar-title>
                 </v-toolbar>
-                <v-divider></v-divider>
               <v-form 
                ref="form" v-model="valid" lazy-validation class="mx-2 mb-1">
-                <v-text-field type="password" v-model="user.params.password" prepend-icon="mdi-account" :counter="30" :rules="passwordRules" label="Password" name="password" required></v-text-field>
+                <v-text-field type="password" v-model="user.params.eportfolios[0].password" prepend-icon="mdi-account"  :rules="passwordRules" label="Password" name="password" required></v-text-field>
                 <v-btn :disabled="!valid" color="success" class="mr-4 mb-3" @click="validate">
-                  Validate
+                  Editar
                 </v-btn>
                 <v-btn color="error" class="mr-4 mb-3" @click="reset">
-                  Reset Form
-                </v-btn>
-                <v-btn color="warning" @click="resetValidation" class="mb-3">
-                  Reset Validation
+                  Reset
                 </v-btn>
               </v-form>
               </v-card>
@@ -68,7 +64,7 @@ export default {
             fromDateVal: null,
             passwordRules: [
               v => !!v || 'Campo obrigatório',
-              v => (v && v.length <= 30) || 'Password tem que ter no máximo 30 caracteres',
+              v => (v && v.length >= 6) || 'Password tem que ter no mínimo 6 caracteres',
             ],
         }
     },

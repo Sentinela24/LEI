@@ -35,14 +35,14 @@
                 <v-text-field v-model="user.params.eportfolios[0].profissao" prepend-icon="mdi-briefcase" label="Profissão" name="profissao" required></v-text-field>
         <!--    <v-checkbox v-model="checkbox" :rules="[v => !!v || 'You must agree to continue!']" label="Do you agree?" required></v-checkbox> -->
                 <v-btn :disabled="!valid" color="success" class="mr-4 mb-3" @click="validate">
-                  Validate
+                  Criar
                 </v-btn>
                 <v-btn color="error" class="mr-4 mb-3" @click="reset">
-                  Reset Form
+                  Reset
                 </v-btn>
-                <v-btn color="warning" @click="resetValidation" class="mb-3">
+        <!--        <v-btn color="warning" @click="resetValidation" class="mb-3">
                   Reset Validation
-                </v-btn>
+                </v-btn> -->
               </v-form>
               </v-card>
         
