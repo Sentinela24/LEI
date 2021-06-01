@@ -14,18 +14,13 @@ export const authentication = {
             return new Promise(resolve => {
                 commit('loginRequest', { identifier });
 
-                userService.login(identifier, password)
-                    .then(
-                        u => {
-                            commit('loginSuccess', u);
-                            resolve();
-                            
-                        },
-                        error => {
-                            commit('loginFailure', error);
-                            dispatch('alert/error', 'Dados inválidos!', { root: true });    
-                        }
-                    );
+                userService.login(identifier, password).then( u => {
+                    commit('loginSuccess', u);
+                    resolve();
+                }, error => {
+                    commit('loginFailure', error);
+                    dispatch('alert/error', 'Dados inválidos!', { root: true });    
+                });
             });
         },
         
@@ -37,35 +32,28 @@ export const authentication = {
         register({ dispatch, commit }, user) {
             commit('registerRequest', user);
         
-            userService.register(user)
-                .then(
-                    user => {
-                        commit('registerSuccess', user);
-                        router.push('/login');
-                        setTimeout(() => {
-                            // display success message after route change completes
-                            dispatch('alert/success', 'Registro efetuado com sucesso', { root: true });
-                        })
-                    },
-                    error => {
-                        commit('registerFailure', error);
-                        if(error[0].messages[0].message.localeCompare("Email already taken") == 0)
-                            dispatch('alert/error', 'Username já utilizado', { root: true });
-                        else   
-                            dispatch('alert/error', 'Email já utilizado', { root: true });
-                    }
-                );
+            userService.register(user).then(user => {
+                commit('registerSuccess', user);
+                router.push('/login');
+                setTimeout(() => {
+                    dispatch('alert/success', 'Registro efetuado com sucesso', { root: true }); // mensagem de sucesso após mudar de route
+                })
+            }, error => {
+                commit('registerFailure', error);
+                if(error[0].messages[0].message.localeCompare("Email already taken") == 0)
+                    dispatch('alert/error', 'Username já utilizado', { root: true });
+                else   
+                    dispatch('alert/error', 'Email já utilizado', { root: true });
+            });
         },
+
         getUser({ commit }, { id }) {
             commit('getUserRequest', { id });
 
-            userService.getById(id)
-                .then(
-                    user => {
-                        commit('getUserSuccess', user)
-                    },
-                    error => commit('getUserFailure', error)
-                );
+            userService.getById(id).then( user => {
+                commit('getUserSuccess', user)
+            }, error => 
+                commit('getUserFailure', error));
         }
     },
     mutations: {

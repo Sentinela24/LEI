@@ -40,22 +40,19 @@
             <div v-if="alert.message" :class="`alert ${alert.type}`">{{alert.message}}</div>
             <router-view></router-view>
         </v-main>
-        <v-footer app dark padless fixed>
+        <v-footer app dark padless fixed height="90px">
             <v-card text tile class="indigo white--text text-center" width="100%">
-            <v-card-text>
-                <v-btn href="https://github.com/Sentinela24/LEI" target="_blank" class="mx-4 white--text" icon >
-                    <v-icon size="24px"> {{ icons[0] }} </v-icon>
-                </v-btn>
-            </v-card-text>
 
-            <v-card-text  class="white--text pt-0">
+            <v-card-text  class="white--text my-n1">
                 Gestor de CV's e ePortefolios desenvolvido por alunos de Engenharia Informática(MIEI), Universidade do Minho, no âmbito da unidade curricular Laboratório de Informática(LEI).
             </v-card-text>
+            <v-divider class="my-n1"></v-divider>
 
-            <v-divider></v-divider>
-
-            <v-card-text class="white--text">
-                {{ new Date().getFullYear() }} — <strong>Gestor Minhopass</strong>
+            <v-card-text class="white--text mt-n3">
+                {{ new Date().getFullYear() }}  &ensp; —  &ensp; <strong>Gestor Minhopass</strong> &ensp; —
+                <v-btn style="text-decoration: none;" href="https://github.com/Sentinela24/LEI" target="_blank" class="white--text" icon >
+                    <v-icon size="24px"> {{ icons[0] }} </v-icon>
+                </v-btn>
             </v-card-text>
 
 

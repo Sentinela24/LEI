@@ -8,7 +8,7 @@
                     <v-btn class="mx-1 mb-2" to="/login" dark color="indigo">
                                 Login
                     </v-btn>
-                    <v-btn class="mb-2" to="/register" dark color="indigo" >
+                    <v-btn class="mb-2" to="/registar" dark color="indigo" >
                         Registar
                     </v-btn>
                 </v-card>

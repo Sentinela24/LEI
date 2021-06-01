@@ -22,7 +22,7 @@ export const router = new Router({
     { path: '/home', component: HomePage },
     { path: '/eportfolio', component: MyMinhoPassPage },
     { path: '/login', component: LoginPage },
-    { path: '/register', component: RegisterPage },
+    { path: '/registar', component: RegisterPage },
     { path: '/users/:userId', name: 'users', component: PerfilPage },
     { path: '/criar-eportfolio', component: EportfolioPage },
     { path: '/criar', component: CreatePage },
@@ -37,7 +37,7 @@ export const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/register', '/home'];
+  const publicPages = ['/login', '/registar', '/home'];
   const authRequired = !publicPages.includes(to.path);
   console.log(authRequired);
   const loggedIn = localStorage.getItem('user');

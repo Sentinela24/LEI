@@ -1,47 +1,37 @@
 <template>
     <div>
-        <v-container fluid >
-        <v-row justify="center">
-        <v-col cols=4>
-        <h2>Registar</h2>
-        <form @submit.prevent="handleSubmit">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="text" v-model="user.email" v-validate="'required'" name="email" class="form-control" :class="{ 'is-invalid': submitted && errors.has('email') }" />
-                <div v-if="submitted && errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</div>
-            </div>
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" v-model="user.username" v-validate="'required'" name="username" class="form-control" :class="{ 'is-invalid': submitted && errors.has('username') }" />
-                <div v-if="submitted && errors.has('username')" class="invalid-feedback">{{ errors.first('username') }}</div>
-            </div>
-            <div class="form-group">
-                <label htmlFor="password">Password</label>
-                <input type="password" v-model="user.password" v-validate="{ required: true, min: 6 }" name="password" class="form-control" :class="{ 'is-invalid': submitted && errors.has('password') }" />
-                <div v-if="submitted && errors.has('password')" class="invalid-feedback">{{ errors.first('password') }}</div>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary" :disabled="status.registering">Registar</button>
-                <img v-show="status.registering" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                <router-link to="/home" class="btn btn-link">Cancelar</router-link>
-            </div>
-        </form>
-        </v-col>
-        </v-row>
-        </v-container>
+        <v-card class="indigo lighten-5 mx-auto my-10" max-width="874">
+            <v-toolbar class="my-3 indigo white--text text-h1 display-3" dark>
+                <v-toolbar-title><h2>Registo</h2></v-toolbar-title>
+                <v-progress-linear :active="loading" absolute color="green" bottom :indeterminate="loading"></v-progress-linear>
+            </v-toolbar>
+            <v-form ref="form" v-model="valid" lazy-validation class="mx-2 mb-1">
+                <v-text-field v-model="user.username" prepend-icon="mdi-account" :counter="30" :rules="nameRules" label="Utilizador" name="utilizador" required></v-text-field>
+                <v-text-field v-model="user.email" prepend-icon="mdi-email"  :rules="emailRules" label="E-mail" name="email" required></v-text-field>
+                <v-text-field v-model="user.password" type="password" prepend-icon="mdi-lock"  :rules="passRules" label="Password" name="password" required></v-text-field>
+                <v-btn :disabled="!valid" color="success" class="mr-4 mb-3" @click="handleSubmit">Registar</v-btn>
+                <v-btn :disabled="loggingIn" color="error" class="mr-4 mb-3" to="/home" >Cancelar</v-btn>
+            </v-form>
+        </v-card>
     </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { VContainer, VRow, VCol, VLayout } from 'vuetify/lib'
+import { VContainer, VRow, VCol, VLayout, VCard, VToolbarTitle, VProgressLinear, VForm, VDivider, VTextField } from 'vuetify/lib'
 
 export default {
     components : {
         VContainer,
         VRow,
         VCol,
-        VLayout
+        VLayout, 
+        VCard,
+        VToolbarTitle,
+        VProgressLinear,
+        VForm,
+        VDivider,
+        VTextField
     },
 
     data () {
@@ -49,9 +39,20 @@ export default {
             user: {
                 email: '',
                 username: '',
-                password: ''
+                password: '', 
             },
-            submitted: false
+            valid: false,
+            nameRules: [
+              v => !!v || 'Campo obrigatório',
+              v => (v && v.length <= 30) || 'Nome tem que ter no máximo 30 caracteres',
+            ],
+            emailRules: [
+              v => !!v || 'Campo obrigatório',
+              v => /.+@.+\..+/.test(v) || 'E-mail tem que ser válido',
+            ],
+            passRules: [
+              v => !!v || 'Campo obrigatório',
+            ]
         }
     },
     computed: {
