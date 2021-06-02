@@ -14,7 +14,8 @@ export const userService = {
     updateUser,
     deleteEportUser,
     removeEport,
-    editUser
+    editUser,
+    updateUserCV
 };
 
 function login(identifier, password) {
@@ -159,6 +160,33 @@ function editUser(password, id){
     return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
 
 }
+
+function updateUserCV(user, pdf){
+
+    var cvs
+    
+    console.log("PDF: " + JSON.stringify(pdf))
+
+    if (typeof user.cvs === 'undefined'){
+        cvs = '{"cvs" : [' + pdf + ']}'
+    }
+
+    else {
+        user['cvs'].push({"_id" : pdf.id})
+        cvs = '{"cvs" :' + JSON.stringify(user.cvs) + '}'
+    }
+
+    console.log("Cvs " + cvs)
+
+    const requestOptions = {
+        method: 'PUT',
+        headers: special_authHeader(),
+        body: cvs
+    };
+
+    return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(handleResponse);
+}
+
 function handleResponse(response) {
     return response.text().then(text => {
         const data = text && JSON.parse(text);

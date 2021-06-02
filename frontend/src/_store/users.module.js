@@ -151,8 +151,31 @@ export const users = {
                         dispatch('alert/error', error, { root: true })
                     }
                 );
-        }  
+        },
+
+        put_CV({ dispatch, commit }, { user, pdf} ){
+            commit('getUserRequest', { user });
+
+            
+            userService.updateUserCV( user, pdf)
+                .then(
+                    u => {
+                        commit('getUserSuccess', u);
+                        //router.push('/libray');
+                        setTimeout(() => {
+                            // display success message after route change completes
+                            dispatch('alert/success', 'CV adicionado', { root: true });
+                        })
+                    },
+                    error => {
+                        commit('getUserFailure', error);
+                        dispatch('alert/error', error, { root: true });
+                    }
+                )
+        }
+                
     },
+
     mutations: {
         getAllRequest(state) {
             state.all = { loading: true };

@@ -38,7 +38,7 @@
                         <v-icon color="indigo">mdi-account</v-icon>
                       </v-list-item-action>
                       <v-list-item-content>
-                        <v-list-item-title ><h5>{{user.params.eportfolios[0].nome.substr(0, 10)}}</h5></v-list-item-title>
+                        <v-list-item-title ><h5>{{user.params.eportfolios[0].nome.substr(0, 30)}}</h5></v-list-item-title>
                       </v-list-item-content>
                     </v-list-item> 
                     <v-divider inset></v-divider>
@@ -175,15 +175,16 @@ export default {
       exportToPDF () {
         var element = document.getElementById('document');
         var opt = {
+          margin: 1,
           filename:'eportefolio.pdf',
           image: { type: 'jpeg', quality: 0.95 },
           html2canvas:  { scale: 2 },
           jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
         // New Promise-based usage:
-        html2pdf().set(opt).from(element).save();
+        //html2pdf().set(opt).from(element).save();
         // Old monolithic-style usage:
-        // html2pdf(element, opt);
+        html2pdf(element, opt);
 		  },
 
       async selectSection(index) {

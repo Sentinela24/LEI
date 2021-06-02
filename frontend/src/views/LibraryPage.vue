@@ -59,17 +59,17 @@
                   <v-card-title>
                     <h2>Carregar CV</h2>
                   </v-card-title>
-                  <v-card-text class="my-n4">
-                    <v-file-input prepend-icon="mdi-file text--indigo" :rules="fileRules" accept="application/pdf" label="Adicionar" type="file" name="avatar" show-size truncate-length="25" @change="onFileSelected"></v-file-input>
-                  </v-card-text>
-                  <v-card-actions class="mt-n6">
+                    <v-form 
+                      ref="form" v-model="valid" lazy-validation class="mx-2 mb-1">
+                    <v-file-input prepend-icon="mdi-file text--indigo" :rules="fileRules" accept="application/pdf, image/png, image/jpeg, image/bmp" label="Adicionar" type="file" name="cv" show-size truncate-length="25" @change="onFileSelected"></v-file-input>
+                    
                     <v-btn  text @click="adicionar_popup = false">
                       Cancelar
                     </v-btn>
-                    <v-btn color="primary" text @click="adicionar_popup = false">
+                    <v-btn :disabled="!valid" color="primary" text @click="upload_pdf">
                       Carregar
                     </v-btn>
-                  </v-card-actions>
+                  </v-form>
                 </v-card>
               </v-dialog>
 
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { VContainer, VRow, VCol, VLayout, VImg, VCard, VCardText, VCardTitle, VCardSubtitle, VDivider, VCardActions, VProgressLinear, VList, VListItem, VListItemTitle,  VListItemAction, VListItemContent, VAppBarNavIcon, VToolbarTitle, VMenu, VProgressCircular, VFileInput, VDialog, VItem, VHover, VOverlay, VFadeTransition } from 'vuetify/lib'
+import { VContainer, VRow, VCol, VLayout, VImg, VCard, VCardText, VCardTitle, VCardSubtitle, VDivider, VCardActions, VProgressLinear, VList, VListItem, VListItemTitle,  VListItemAction, VListItemContent, VAppBarNavIcon, VToolbarTitle, VMenu, VProgressCircular, VFileInput, VDialog, VItem, VHover, VOverlay, VFadeTransition, VForm } from 'vuetify/lib'
 import NavBar from '../components/NavBar'
 import pdf from 'vue-pdf'
 import axios from 'axios'
@@ -116,7 +116,7 @@ export default {
         { title: 'Apagar ePortefolio', click() {} },
       ],
       fileRules: [
-        value => !value || value.size < 1000000 || 'Tamanho da foto no máximo com 1 MB!',
+        value => !value || value.size < 2000000 || 'Tamanho da foto no máximo com 2 MB!',
       ],
       pdf: null,
       adicionar_popup: false,
@@ -124,7 +124,8 @@ export default {
       pdf_popup: false,
       strapi_url: 'http://localhost:1337',
       currentPage: 0,
-      pageCount: 0
+      pageCount: 0,
+      valid : true
     }),
 
     components: {
@@ -156,7 +157,8 @@ export default {
         VItem,
         VHover,
         VOverlay,
-        VFadeTransition
+        VFadeTransition,
+        VForm 
     },
 
     computed: {
@@ -217,6 +219,59 @@ export default {
           await this.$store.dispatch('users/deleteEport', {user : this.user.params});
           if(this.user.params.eportfolios.length == 0)
             this.$router.push("/criar");
+        }
+      },
+
+      async upload_pdf(){
+        console.log(this.$refs.form)
+
+        if(this.$refs.form.validate()){
+                const formElement = this.$refs.form.$el
+                const formData = new FormData();
+                const formElements = formElement.elements;
+
+                for (let i = 0; i < formElements.length; i++) {
+                    const currentElement = formElements[i];
+
+                    if (currentElement.type === 'file') {
+
+                      console.log("current" + currentElement)
+                      if (currentElement.files.length === 1) {
+
+                  
+                          const file = currentElement.files[0];
+
+                          // get File Object
+                          var fileObject = currentElement.files[0];
+
+                          // reCreate new Object and set File Data into it
+                          var newObject  = {
+                             'lastModified'     : fileObject.lastModified,
+                             'lastModifiedDate' : fileObject.lastModifiedDate,
+                             'name'             : fileObject.name,
+                             'size'             : fileObject.size,
+                             'type'             : fileObject.type
+                          };
+
+                          // then use JSON.stringify on new object
+                          console.log("FILE: " + JSON.stringify(newObject));
+
+                          formData.append("username", "joao");
+                          
+                          formData.append(`file`, fileObject, fileObject.name);
+
+                          console.log("SIZE " + JSON.stringify(Object.fromEntries(formData)))
+
+                      } else {
+                          for (let i = 0; i < currentElement.files.length; i++) {
+                              const file = currentElement.files[i];
+                              formData.append(`files.${currentElement.name}`, file, file.name);
+                          }
+                      }
+                    }
+                }
+               
+          await this.$store.dispatch('users/put_CV', { user : this.user.params, pdf : formData });
         }
       }
     },
