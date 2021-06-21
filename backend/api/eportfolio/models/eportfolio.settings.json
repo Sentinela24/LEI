@@ -42,8 +42,8 @@
       "via": "eportfolio"
     },
     "trabalhos": {
-      "collection": "experiencia-profissional",
-      "via": "eportfolio"
+      "via": "eportfolio",
+      "collection": "experiencia-profissional"
     },
     "educacoes": {
       "collection": "educacao",

@@ -1,180 +1,60 @@
 <template>
-    <div>
-        <NavBar/>
-        <v-container fluid>
-            <v-card
-            :loading="loading"
-            class="indigo lighten-5 mx-auto my-10"
-            max-width="874">
-                <template slot="progress">
-                    <v-progress-linear
-                        color="white"
-                        height="10"
-                        indeterminate>
-                    </v-progress-linear>
-                </template>
-                <v-toolbar class="my-3 indigo white--text text-h1 display-3" dark>
-                  <v-toolbar-title>
-                      <h2>{{user.params.username}}</h2>
-                  </v-toolbar-title>
+  <div>
+    <NavBar/>
+    <v-container v-if="(typeof user.params !== 'undefined')" fluid>
+      <v-card flat class="mx-auto my-3" max-width="1180px">
+        <v-toolbar flat class="indigo--text text-h1 display-3" >
+          <v-toolbar-title>
+              <h2>Feed de operações</h2>
+          </v-toolbar-title>
+        </v-toolbar>
+        <v-divider class="my-1 mx-2"></v-divider>
+        <v-card-text class="black--text mt-n2">
+          <h6>Consulta o registo da tua atividade no gestor Minhopass.</h6>
+        </v-card-text>
+        <v-card flat class="white mx-auto mb-4 py-7" max-width="1130px"> 
+          <v-data-table :headers="headers" :items="user.params.feed" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer class="indigo lighten-5 elevation-1 mt-n5" @page-count="pageCount = $event" >
 
-                  <v-spacer></v-spacer>
+            <template v-slot:[`item.tipo`]="{ item }">
+              <v-chip :color="getColor(item.tipo)" dark> 
+                {{ item.tipo }}
+              </v-chip>
+            </template>
+            <template v-slot:[`item.data`]="{ item }">
+              <v-list-item class="ml-n4"> 
+                {{ new Date(item.data).getDate() + '/' + new Date(item.data).getMonth()+1 + '/' + new Date(item.data).getFullYear()   + ' ' + new Date(item.data).getHours() + ':' + new Date(item.data).getMinutes() }}
+              </v-list-item>
+            </template>
+            <template v-slot:[`item.actions`]="{ item }">
+              <v-icon small color="indigo" @click="delete_item(item)">
+                mdi-delete
+              </v-icon>
+            </template>
+          </v-data-table>
+          <div class="text-center pt-2">
+            <v-pagination v-model="page" :length="pageCount"></v-pagination>
+          </div>
+        </v-card>
+      </v-card>
 
-                  <v-menu offset-y>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        color="indigo"
-                        dark
-                        text
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        <v-icon color="white"> mdi-dots-vertical </v-icon> 
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item 
-                        v-for="(item, index) in items"
-                        :key="index"
-                        @click="selectSection(index)"
-                      >
-                        <v-list-item-title :to= "item.path" >{{ item.title }}</v-list-item-title>
+      <v-dialog v-model="dialogDelete" max-width="500px">
+        <v-card>
+          <v-card-title class="text-h5">Tem a certeza que pretende eliminar esta operação do registo?</v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="close_delete">Cancelar</v-btn>
+            <v-btn color="blue darken-1" text @click="delete_item_confirm">Sim</v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                </v-toolbar>
-                
-                <v-card-title class="indigo lighten-5 ml-0 my-n1 indigo--text"><h4>O meu ePortefolio</h4></v-card-title>
-                
-                <v-divider class="my-0" ></v-divider>
-                
-                <v-list class="indigo lighten-5">
-                  <v-list-item class="mb-n4">
-                    <v-list-item-action>
-                      <v-icon color="indigo">mdi-account</v-icon>
-                    </v-list-item-action>
-
-                    <v-list-item-content>
-                      <v-list-item-title ><h5>{{user.params.eportfolios[0].nome.substr(0, 10)}}</h5></v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-divider inset></v-divider>
-
-                  <v-list-item class="mb-n4">
-                    <v-list-item-action>
-                      <v-icon color="indigo">mdi-email</v-icon>
-                    </v-list-item-action>
-
-                    <v-list-item-content>
-                      <v-list-item-title><h5>{{user.params.eportfolios[0].email}}</h5></v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-divider inset></v-divider>
-
-                  <v-list-item class="mb-n4">
-                    <v-list-item-action>
-                      <v-icon color="indigo">mdi-phone</v-icon>
-                    </v-list-item-action>
-
-                    <v-list-item-content>
-                      <v-list-item-title><h5>{{user.params.eportfolios[0].telemovel}}</h5></v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-divider inset></v-divider>
-
-                  <v-list-item class="mb-n4">
-                    <v-list-item-action>
-                      <v-icon color="indigo">mdi-map-marker</v-icon>
-                    </v-list-item-action>
-
-                    <v-list-item-content>
-                      <v-list-item-title><h5>{{user.params.eportfolios[0].nacionalidade}}</h5></v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-divider inset></v-divider>
-
-                  <v-list-item class="mb-n4">
-                    <v-list-item-action>
-                      <v-icon color="indigo">mdi-account-group</v-icon>
-                    </v-list-item-action>
-
-                    <v-list-item-content>
-                      <v-list-item-title><h5>{{user.params.eportfolios[0].genero}}</h5></v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-divider inset></v-divider>
-
-                  <v-list-item class="mb-n4">
-                    <v-list-item-action>
-                      <v-icon color="indigo">mdi-calendar</v-icon>
-                    </v-list-item-action>
-
-                    <v-list-item-content>
-                      <v-list-item-title><h5>{{user.params.eportfolios[0].data_nasc}}</h5></v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-divider inset></v-divider>
-
-                  <v-list-item class="mb-n4">
-                    <v-list-item-action>
-                      <v-icon color="indigo">mdi-briefcase</v-icon>
-                    </v-list-item-action>
-
-                    <v-list-item-content>
-                      <v-list-item-title><h5>{{user.params.eportfolios[0].profissao}}</h5></v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-               <!--        <v-card-actions>
-                                    <v-btn
-                                        to="/criar-eportfolio"
-                                        color="deep-purple lighten-2"
-                                        text
-                                        @click="criar">
-                                        Criar
-                                    </v-btn>
-                        </v-card-actions> -->
-                    </v-card>
-        </v-container>
-        <v-container fluid >
-            <v-row align="center" justify="center">
-                <v-col cols=3>
-        <v-row justify="center">
-    <v-col
-      cols="12"
-      sm="8"
-    >
-      
-    </v-col>
-  </v-row>
-        
-                    
-                 <!--   <h3>Lista de utilizadores:</h3>
-                    <em v-if="users.loading">A carregar utilizadores...</em>
-                    <span v-if="users.error" class="text-danger">ERROR: {{users.error}}</span>
-                    <ul v-if="users.params">
-                        <li v-for="user in users.params" :key="user.id">
-                            <router-link :to="$router.resolve({ name: 'users', params: { userId: user.id }}).href">{{user.paramsname + ' ' + user.email}}</router-link>
-                        </li>
-                    </ul>
-                    <p>
-                        <router-link to="/home">Logout</router-link>
-                    </p> -->
-                </v-col>
-            </v-row>
-        </v-container>
-    </div>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import { VContainer, VRow, VCol, VLayout, VImg, VCard, VCardText, VCardTitle, VCardSubtitle, VDivider, VCardActions, VProgressLinear, VList, VListItem, VListItemTitle,  VListItemAction, VListItemContent, VAppBarNavIcon, VToolbarTitle, VMenu } from 'vuetify/lib'
+import { VContainer, VRow, VCol, VLayout, VImg, VCard, VCardText, VCardTitle, VCardSubtitle, VDivider, VCardActions, VProgressLinear, VList, VListItem, VListItemTitle,  VListItemAction, VListItemContent, VAppBarNavIcon, VToolbarTitle, VMenu, VDataTable, VPagination, VTextField, VChip, VDialog } from 'vuetify/lib'
 import NavBar from '../components/NavBar'
 
 export default {
@@ -182,26 +62,29 @@ export default {
       loading: false,
       selection: 1,
       model: null,
-      classes: [
-        ['h1', 'Heading 1', '6rem', '300', '-.015625em', -1],
-        ['h2', 'Heading 2', '3.75rem', '300', '-.0083333333em', 0],
-        ['h3', 'Heading 3', '3rem', '400', 'normal', 1],
-        ['h4', 'Heading 4', '2.125rem', '400', '.0073529412em', 2],
-        ['h5', 'Heading 5', '1.5rem', '400', 'normal', 2],
-        ['h6', 'Heading 6', '1.25rem', '500', '.0125em', 3],
-        ['subtitle-1', 'Subtitle 1', '1rem', '400', '.009375em', 4],
-        ['subtitle-2', 'Subtitle 2', '0.875rem', '500', '.0071428571em', 4],
-        ['body-1', 'Body 1', '1rem', '400', '.03125em', 4],
-        ['body-2', 'Body 2', '0.875rem', '400', '.0178571429em', 4],
-        ['button', 'Button', '0.875rem', '500', '.0892857143em', 4],
-        ['caption', 'Caption', '0.75rem', '400', '.0333333333em', 4],
-        ['overline', 'Overline', '0.75rem', '500', '.1666666667em', 4],
-      ],
+      headers: [
+          {
+            text: 'Operação',
+            align: 'start',
+            value: 'operacao',
+            class: 'indigo--text title'
+          },
+          { text: 'Quando', value: 'data', class: 'indigo--text title'},
+          { text: 'Onde', value: 'tipo', width: '210px', class: 'indigo--text title' },
+          { text: 'Nota', value: 'nota', class: 'indigo--text title' },
+          { text: 'Ações', value: 'actions', sortable: false, class: 'indigo--text title' },
+        ],
       items: [
         { title: 'Editar Conta', path: '/editar-perfil', click() { this.$router.push('/editar-perfil')} },
         { title: 'Editar ePortefolio', path: '/editar-eportefolio', click() { this.$router.push('/editar-eportefolio')} },
         { title: 'Apagar ePortefolio', click() {} },
       ],
+      page: 1,
+      pageCount: 0,
+      itemsPerPage: 10,
+      dialogDelete: false,
+      deleteIndex: -1,
+      operations: []
     }),
 
     components: {
@@ -225,12 +108,19 @@ export default {
         VListItemContent,
         VToolbarTitle,
         VAppBarNavIcon,
-        VMenu
+        VMenu,
+        VPagination,
+        VDataTable,
+        VTextField,
+        VChip,
+        VDialog
     },
 
     computed: {
         user () {
           console.log("User: "+ JSON.stringify(this.$store.state.users.user));
+          this.operations = this.$store.state.users.user.params.feed
+          console.log("antes" + this.operations)
           return this.$store.state.users.user;
         },
         date() {
@@ -249,15 +139,28 @@ export default {
         setTimeout(() => (this.loading = false), 2000)
       },
 
-      async selectSection(index) {
-        if (this.items[index].path)
-          this.items[index].click.call(this)
-        else{
-          await this.$store.dispatch('users/deleteEport', {user : this.user.params});
-          if(this.user.params.eportfolios.length == 0)
-            this.$router.push("/criar");
-        }
-      }
+      getColor (type) {
+        if (type == 'Conta') return 'red'
+        else if (type == 'ePortefolio') return 'orange'
+        else return 'green'
+      },
+
+      delete_item (item) {
+        this.deleteIndex = this.operations.indexOf(item)
+        this.dialogDelete = true  
+      },
+
+      delete_item_confirm () {
+        this.operations.splice(this.deleteIndex, 1)
+        this.$store.dispatch('users/delete_operation', { feed: this.operations, user: this.user.params} )
+        this.close_delete()
+      },
+
+      close_delete () {
+        this.dialogDelete = false
+        this.deleteIndex = -1
+      },
+
     },
 
     created () {

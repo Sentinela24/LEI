@@ -41,9 +41,9 @@ export const authentication = {
             }, error => {
                 commit('registerFailure', error);
                 if(error[0].messages[0].message.localeCompare("Email already taken") == 0)
-                    dispatch('alert/error', 'Username já utilizado', { root: true });
-                else   
                     dispatch('alert/error', 'Email já utilizado', { root: true });
+                else   
+                    dispatch('alert/error', 'Username já utilizado', { root: true });
             });
         },
 

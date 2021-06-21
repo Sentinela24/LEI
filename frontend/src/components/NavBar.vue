@@ -1,8 +1,5 @@
 <template>
-    <v-navigation-drawer app clipped class="indigo lighten-5"
-      v-model="drawer"
-      :mini-variant.sync="mini"
-      permanent fixed>
+    <v-navigation-drawer v-if="(typeof user.params !== 'undefined')"  app clipped class="indigo lighten-5" v-model="drawer" :mini-variant.sync="mini" permanent fixed>
       <v-list-item class="px-2 mb-n2">
         <v-list-item-avatar v-if="user.params.eportfolios.length && user.params.eportfolios[0].avatar != null" >
             <v-img :src="image"></v-img>
@@ -75,8 +72,9 @@ export default {
       return {
         drawer: true,
         items: [
-          { title: 'ePortefolio', icon: 'mdi-clipboard-account', to: '/eportfolio'},
           { title: 'Biblioteca', icon: 'mdi-book-open-variant', to: '/biblioteca'},
+          { title: 'Conta', icon: 'mdi-settings', to:'/conta' },
+          { title: 'ePortefolio', icon: 'mdi-clipboard-account', to: '/eportfolio'},
           { title: 'Feed', icon: 'mdi-bell', to:'/feed' },
         ],
         mini: true,

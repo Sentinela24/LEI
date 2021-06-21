@@ -17,9 +17,6 @@
     "ent_empregadora": {
       "type": "string"
     },
-    "cidade": {
-      "type": "string"
-    },
     "em_curso": {
       "type": "boolean"
     },
@@ -41,15 +38,12 @@
     "hiper": {
       "type": "string"
     },
-    "descricao": {
-      "type": "text"
-    },
     "endereco": {
       "model": "endereco"
     },
     "eportfolio": {
-      "via": "trabalhos",
-      "model": "eportfolio"
+      "model": "eportfolio",
+      "via": "trabalhos"
     },
     "data_int": {
       "type": "json"

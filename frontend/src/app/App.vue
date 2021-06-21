@@ -1,15 +1,12 @@
 <template>
     <v-app>
         <v-app-bar fixed app dark max-height="70px" clipped-left class="indigo" >
-                <v-img
-                    class="mx-2"
-                    src="http://localhost:1337/uploads/7b46b1d08dba4532bfdeaaedbe943252_1_b27d38c443.png"
-                    max-height="40"
-                    max-width="40"
-                    contain
-                ></v-img>
+            <v-img class="mx-2" src="http://localhost:1337/uploads/7b46b1d08dba4532bfdeaaedbe943252_1_b27d38c443.png" max-height="40" max-width="40" contain></v-img>
             <div v-if="current_route != '/home' && current_route != '/eportfolio'">
-                <v-toolbar-title class="text-no-wrap text-h5" style="cursor: pointer" @click="$router.push('/home')" > 
+                <v-toolbar-title v-if="typeof user === 'undefined'" class="text-no-wrap text-h5" style="cursor: pointer" @click="$router.push('/home')" > 
+                    <span> Minhopass </span>
+                </v-toolbar-title>
+                <v-toolbar-title v-else class="text-no-wrap text-h5" style="cursor: pointer" @click="$router.push('/eportfolio')" > 
                     <span> Minhopass </span>
                 </v-toolbar-title>
             </div>
@@ -19,19 +16,25 @@
                 </v-toolbar-title>
             </div>
             <v-spacer></v-spacer>
-            <v-btn text target="_blank" class="indigo">
+            <v-btn v-if="current_route != '/home' && current_route != '/eportfolio' && typeof user === 'undefined'" to="/home" text class="indigo">
                 <span> Home </span>
             </v-btn>
-            <v-btn text target="_blank" class="indigo">
+            <v-btn v-else-if="current_route != '/home' && current_route != '/eportfolio'" to="/eportfolio" text class="indigo">
+                <span> Home </span>
+            </v-btn>
+            <v-btn v-else text class="indigo">
+                <span> Home </span>
+            </v-btn>
+            <v-btn to="/sobre_nos" text class="indigo">
                 <span> Sobre Nós </span>
             </v-btn>
-            <v-btn text target="_blank" class="indigo">
+            <v-btn to="/ajuda" text class="indigo">
                 <span> Ajuda </span>
             </v-btn>
 
-            <div v-if="current_route != '/login' && current_route != '/home' && current_route != '/register'">
+            <div v-if="current_route != '/login' && current_route != '/home' && current_route != '/registar' && (user)">
                 <v-btn text @click="handle_logout" class="indigo">
-                    <span> Logout </span>  
+                    <span> Logout</span>  
                 </v-btn>
             </div>
         </v-app-bar>
@@ -70,7 +73,13 @@ export default {
     computed: {
         alert () {
             return this.$store.state.alert
-        }
+        },
+        user(){
+            return this.$store.state.authentication.user
+        },
+        loggedIn () {
+            return this.$store.state.authentication.status;
+        },
     },
 
     data () {

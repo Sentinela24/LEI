@@ -1,6 +1,6 @@
 <template>
-    <v-container fill-height :style="{backgroundImage: 'url(http://localhost:1337/uploads/desktop_2325627_1920_d50af40d6d.jpg)'}" fluid>
-        <v-row>
+    <v-parallax height="985" src="http://localhost:1337/uploads/desktop_2325627_1920_d50af40d6d.jpg">
+        <v-row align="center" justify="center">
             <v-col md="6" class="ml-auto">
                 <v-card class="py-2 px-3" elevation="10" color="rgb(237, 237, 237, 1)"  max-width="510px" >
                     <h1 class="font-weight-normal indigo--text display-3  mt-2"> Gestor Minhopass </h1>
@@ -14,11 +14,11 @@
                 </v-card>
             </v-col>
         </v-row>
-    </v-container>
+    </v-parallax>
 </template>
 
 <script>
-import { VCol, VRow, VContainer, VImg, VCard } from 'vuetify/lib'
+import { VCol, VRow, VContainer, VImg, VCard, VParallax } from 'vuetify/lib'
 
 export default {
     
@@ -27,7 +27,8 @@ export default {
         VRow, 
         VContainer,
         VImg,
-        VCard
+        VCard,
+        VParallax
     },
 
     created () {
@@ -36,3 +37,12 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+
+#app {
+  background: url('http://localhost:1337/uploads/desktop_2325627_1920_d50af40d6d.jpg') no-repeat center center fixed !important;
+  background-size: cover;
+}
+
+</style>
