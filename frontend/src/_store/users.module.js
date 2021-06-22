@@ -8,7 +8,8 @@ export const users = {
         all: {},
         types: {},
         user: null, 
-        eport: null
+        eport: null,
+        address: null
     },
     actions: {
 
@@ -69,16 +70,12 @@ export const users = {
 
             let is_empty = Object.values(JSON.parse(address)).every(x => x === null || x === '')
             if(!is_empty){
-                console.log("True or false: " + Object.values(address))
                 address_promises.push(userService.create("enderecos", address, null))
                 eport_has_address = true
             }   
 
             is_empty = true
             for(let i = 0; i < Object.values(JSON.parse(address_work))[0].length; i++){
-                console.log("1" + address_work)
-                console.log("2" + JSON.stringify(Object.values(JSON.parse(address_work))[0]))
-                console.log("3" + JSON.stringify(Object.values(JSON.parse(address_work))[0][i]))
                 
                 var data = Object.values(JSON.parse(address_work))[0][i]
                 for(var key in data){
@@ -117,14 +114,14 @@ export const users = {
             let type_promises = []
 
             let inc = 0
-            for(let i = 0; i < Object.values(work)[0].length; i++){
+            for(let i = 0; i < Object.values(JSON.parse(work))[0].length; i++){
                 if(work_has_address.includes(i))
                     work_promises.push(userService.create("experiencia-profissionals", JSON.stringify(Object.values(JSON.parse(work))[0][i]), ap[inc++]))
                 else
                     work_promises.push(userService.create("experiencia-profissionals", JSON.stringify(Object.values(JSON.parse(work))[0][i]), null))
             }
 
-            for(let i = 0; i < Object.values(education)[0].length; i++){
+            for(let i = 0; i < Object.values(JSON.parse(education))[0].length; i++){
                 if(edu_has_address.includes(i))
                     edu_promises.push(userService.create("educacaos", JSON.stringify(Object.values(JSON.parse(education))[0][i]), ap[inc++]))
                 else
@@ -132,14 +129,14 @@ export const users = {
             }
             
             let s = 0
-            is_empty = Object.values(skills).every(x => x === null || x === '')
-            if(is_empty)
+            is_empty = Object.values(JSON.parse(skills)).every(x => x === null || x === '')
+            if(!is_empty)
                 s = await userService.create("competencias-pessoais", skills, null)
             else
                 s = null
 
             is_empty = true
-            for(let i = 0; i < Object.values(type)[0].length; i++){
+            for(let i = 0; i < Object.values(JSON.parse(type))[0].length; i++){
 
                 var data = Object.values(JSON.parse(type))[0][i]
                 for(var key in data){
@@ -149,7 +146,7 @@ export const users = {
                     }
                 }
 
-                if(is_empty)
+                if(!is_empty)
                     type_promises.push(userService.create("tipos", JSON.stringify(Object.values(JSON.parse(type))[0][i]), null))
             }
 
@@ -409,7 +406,23 @@ export const users = {
                         dispatch('alert/error', 'Aconteceu um erro', { root: true });
                     }
                 )
-        }
+        },
+
+        /* Return an eportfolio with specific id */
+        get_address({ commit }, { id }) {
+            return new Promise(resolve => {
+                commit('getAddressRequest', { id });
+
+                userService.getById(id, 'enderecos')
+                    .then(
+                        address => {
+                            commit('getAddressSuccess', address),
+                            resolve();
+                        },
+                        error => commit('getAddressFailure', error)
+                    );
+            })   
+        },
                 
     },
 
@@ -440,6 +453,15 @@ export const users = {
         },
         getEportFailure(state, error) {
             state.eport = { error };
+        },
+        getAddressRequest(state, id) {
+            state.address = { loading: true };
+        },
+        getAddressSuccess(state, address) {
+            state.address = { params: address };
+        },
+        getAddressFailure(state, error) {
+            state.address = { error };
         },
         putEportfolioRequest(state) {
             state.user = { loading: true };

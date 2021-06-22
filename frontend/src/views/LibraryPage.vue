@@ -118,7 +118,7 @@
                   <v-btn class="mx-2" color="indigo" dark  elevation="3" @click="criar_popup = false">
                     Seu ePortefolio
                   </v-btn>
-                  <v-btn class="mx-2" color="indigo" text elevation="3" to="/criar-eportfolio">
+                  <v-btn class="mx-2 criar" color="indigo" text elevation="3" to="/criar-eportfolio">
                     Criar novo
                   </v-btn>
                   <v-btn class="mx-2" color="indigo" text elevation="3" @click="criar_popup = false">
@@ -349,3 +349,8 @@ export default {
     
 };
 </script>
+<style scoped>
+  .criar{
+    text-decoration: none;
+  }
+</style>

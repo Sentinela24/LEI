@@ -29,13 +29,13 @@
                 <v-stepper-content step="1">
                   <v-form ref="form" v-model="valid" lazy-validation class="mx-2 mb-1">
                     <v-card-title class="indigo--text"><h3>Informação pessoal</h3></v-card-title>
-                    <v-text-field v-model="eportfolio.name" prepend-icon="mdi-account" :counter="30" :rules="nameRules" label="Nome" name="nome" required></v-text-field>
+                    <v-text-field v-model="eportfolio.nome" prepend-icon="mdi-account" :counter="30" :rules="nameRules" label="Nome" name="nome" required></v-text-field>
                     <v-file-input prepend-icon="mdi-camera" :rules="fileRules" accept="image/png, image/jpeg, image/bmp" type="file" name="avatar" label="Foto" show-size truncate-length="25" @change="onFileSelected"></v-file-input>
                     <v-row>
                       <v-col cols="5">
                         <v-menu v-model="birthDateMenu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y max-width="290px" min-width="290px">
                           <template v-slot:activator="{ on }">
-                            <v-text-field label="Data de Nascimento" prepend-icon="mdi-calendar" :rules="[v => !!v || 'Campo obrigatório']" readonly :value="birthDateDisp" v-on="on" name="data_nasc" required></v-text-field>
+                            <v-text-field disabled label="Data de Nascimento" prepend-icon="mdi-calendar" :rules="[v => !!v || 'Campo obrigatório']" readonly :value="eportfolio.data_nasc.substr(0,10)" v-on="on" name="data_nasc" required></v-text-field>
                           </template>
                           <v-date-picker locale="pt-pt" :min="minDate" :max="maxDate" v-model="birthDateVal" no-title @input="birthDateMenu = false"></v-date-picker>
                         </v-menu>
@@ -52,21 +52,21 @@
                     <v-text-field v-model="eportfolio.profissao" prepend-icon="mdi-briefcase" label="Profissão" name="profissao"></v-text-field>
                     <v-card-subtitle class="indigo--text">Contacto</v-card-subtitle>
                     <v-text-field v-model="eportfolio.email" prepend-icon="mdi-email"  :rules="[emailRules, v => !!v || 'Campo obrigatório']" label="E-mail" name="email" required></v-text-field>
-                    <v-text-field v-model="eportfolio.telefone" prepend-icon="mdi-phone" :counter="9" :rules="phoneRules" label="Telefone"  name="telemovel" required></v-text-field>
+                    <v-text-field v-model="eportfolio.telemovel" prepend-icon="mdi-phone" :counter="9" :rules="phoneRules" label="Telefone"  name="telemovel" required></v-text-field>
                   </v-form>
 
                   <v-form ref="form_address" v-model="valid" lazy-validation class="mx-2 mb-1">
                     <v-card-subtitle class="indigo--text">Endereço</v-card-subtitle>
-                    <v-text-field v-model="address.morada" prepend-icon="mdi-home"  label="Morada" name="morada"></v-text-field>
+                    <v-text-field v-model="eportfolio.endereco.morada" prepend-icon="mdi-home"  label="Morada" name="morada"></v-text-field>
                     <v-row>
                       <v-col>
-                        <v-text-field v-model="address.cod_post" prepend-icon="mdi-home-outline" label="Código postal"  name="cod_post"></v-text-field>
+                        <v-text-field v-model="eportfolio.endereco.cod_post" prepend-icon="mdi-home-outline" label="Código postal"  name="cod_post"></v-text-field>
                       </v-col>
                       <v-col>
-                        <v-text-field v-model="address.cidade" prepend-icon="mdi-city"  label="Cidade" name="cidade"></v-text-field>
+                        <v-text-field v-model="eportfolio.endereco.cidade" prepend-icon="mdi-city"  label="Cidade" name="cidade"></v-text-field>
                       </v-col>
                       <v-col>
-                        <v-text-field v-model="address.pais" prepend-icon="mdi-flag-outline"  :items="countries" label="País"  name="pais"></v-text-field>
+                        <v-text-field v-model="eportfolio.endereco.pais" prepend-icon="mdi-flag-outline"  :items="countries" label="País"  name="pais"></v-text-field>
                       </v-col>
                     </v-row>
                     <div>
@@ -79,20 +79,20 @@
 
                 <v-stepper-content step="2">
                   <v-list v-for="(we, index) in eportfolio.trabalhos" :key="index">
-                    <v-card v-if="index < eportefolio.trabalhos.length-1 && index != edit_we_index" class="mx-auto" color="indigo" dark  rounded>
+                    <v-card v-if="index < eportfolio.trabalhos.length && index != edit_we_index" class="mx-auto" color="indigo" dark  rounded>
                       <v-card-title>
                         <v-icon small left>
                           mdi-clipboard-file-outline
                         </v-icon>
-                        <span class="text-subtitle-1 font-weight-light" >{{eportefolio.trabalhos[index].funcao}}</span>
+                        <span class="text-subtitle-1 font-weight-light" >{{we.funcao}}</span>
                       </v-card-title>
                   
                       <v-card-text class="text-subtitle-2 font-weight-bold my-n3">
-                        {{eportefolio.trabalhos[index].ent_empregadora}} | {{address_work[index].cidade}}
+                        {{we.ent_empregadora}} | {{address_work[index].cidade}}
                       </v-card-text>
 
                       <v-card-text class="text-h6 font-weight-bold mt-n7">
-                        {{eportefolio.trabalhos[index].responsabilidades}}
+                        {{we.responsabilidades}}
                       </v-card-text>
                   
                       <v-card-actions>
@@ -110,14 +110,14 @@
                     </v-card>
                   </v-list>
                   <v-form ref="form_work" v-model="valid" lazy-validation class="mx-2 mb-1">
-                    <v-list v-for="(we, index_work) in eportefolio.trabalhos" :key="index_work">
+                    <v-list v-for="(we, index_work) in eportfolio.trabalhos" :key="index_work">
                       <v-card-title v-if="edit_we_index == index_work" class="indigo--text"><h3>Experiência profissional</h3></v-card-title>
                       <v-card-subtitle v-if="edit_we_index == index_work" class="indigo--text">Descreve as tuas experiências profissionais. Podes incluir trabalhos pagos, voluntareado, estágios, freelancing e outras atividade.</v-card-subtitle>
-                      <v-text-field :id="'funcao' + index_work" v-if="edit_we_index == index_work" v-model="eportefolio.trabalhos[index_work].funcao" prepend-icon="mdi-briefcase" :rules="[v => !!v || 'Campo obrigatório']" label="Função ou cargo ocupado" name="funcao" required></v-text-field>
-                      <v-text-field :id="'funcao' + index_work" v-else v-show="false"   v-model="eportefolio.trabalhos[index_work].funcao" prepend-icon="mdi-briefcase" :rules="[v => !!v || 'Campo obrigatório']" label="Função ou cargo ocupado" name="funcao" required></v-text-field>
-                      <v-text-field :id="'ent_empregadora' + index_work" v-if="edit_we_index == index_work" v-model="eportefolio.trabalhos[index_work].ent_empregadora" prepend-icon="mdi-briefcase-outline" :rules="[v => !!v || 'Campo obrigatório']" label="Entidade empregadora" name="ent_empregadora" required></v-text-field>
-                      <v-text-field :id="'ent_empregadora' + index_work" v-else v-show="false" v-model="eportefolio.trabalhos[index_work].ent_empregadora" prepend-icon="mdi-briefcase-outline" :rules="[v => !!v || 'Campo obrigatório']" label="Entidade empregadora" name="ent_empregadora" required></v-text-field>
-                  <!--<v-text-field v-model="eportefolio.trabalhos[index_work].cidade" prepend-icon="mdi-city" :rules="[v => !!v || 'Campo obrigatório']" label="Cidade" name="cidade" required></v-text-field>-->
+                      <v-text-field :id="'funcao' + index_work" v-if="edit_we_index == index_work" v-model="we.funcao" prepend-icon="mdi-briefcase" :rules="[v => !!v || 'Campo obrigatório']" label="Função ou cargo ocupado" name="funcao" required></v-text-field>
+                      <v-text-field :id="'funcao' + index_work" v-else v-show="false"   v-model="we.funcao" prepend-icon="mdi-briefcase" :rules="[v => !!v || 'Campo obrigatório']" label="Função ou cargo ocupado" name="funcao" required></v-text-field>
+                      <v-text-field :id="'ent_empregadora' + index_work" v-if="edit_we_index == index_work" v-model="we.ent_empregadora" prepend-icon="mdi-briefcase-outline" :rules="[v => !!v || 'Campo obrigatório']" label="Entidade empregadora" name="ent_empregadora" required></v-text-field>
+                      <v-text-field :id="'ent_empregadora' + index_work" v-else v-show="false" v-model="we.ent_empregadora" prepend-icon="mdi-briefcase-outline" :rules="[v => !!v || 'Campo obrigatório']" label="Entidade empregadora" name="ent_empregadora" required></v-text-field>
+                  <!--<v-text-field v-model="we.cidade" prepend-icon="mdi-city" :rules="[v => !!v || 'Campo obrigatório']" label="Cidade" name="cidade" required></v-text-field>-->
                       <v-row v-if="edit_we_index == index_work">
                         <v-col>
                           <v-menu v-model="fromDateMenu_work" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y max-width="290px" min-width="290px">
@@ -130,14 +130,14 @@
                         <v-col>
                           <v-menu v-model="toDateMenu_work" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y max-width="290px" min-width="290px">
                             <template v-slot:activator="{ on }">
-                              <v-text-field :id="'data_int' + index_work" v-if="eportefolio.trabalhos[index_work].em_curso" disabled label="Até" prepend-icon="mdi-calendar-outline" readonly v-on="on" name="data_fim"></v-text-field>
+                              <v-text-field :id="'data_int' + index_work" v-if="we.em_curso" disabled label="Até" prepend-icon="mdi-calendar-outline" readonly v-on="on" name="data_fim"></v-text-field>
                               <v-text-field :id="'data_int' + index_work" v-else label="Até" prepend-icon="mdi-calendar-outline" readonly :value="toDateDisp_work" v-on="on" name="data_fim"></v-text-field>
                               </template>
                             <v-date-picker locale="pt-pt" :min="minDate" :max="maxDate" v-model="toDateVal_work" no-title @input="toDateMenu_work= false"></v-date-picker>
                           </v-menu>
                         </v-col>
                         <v-col>
-                          <v-switch :id="'em_curso'+ index_work" label="Em curso" name="em_curso" :value="eportefolio.trabalhos[index_work].em_curso" @click="change_work_em_curso(index_work)"></v-switch> 
+                          <v-switch :id="'em_curso'+ index_work" label="Em curso" name="em_curso" :value="we.em_curso" @click="change_work_em_curso(index_work)"></v-switch> 
                         </v-col>
                       </v-row>
                       <v-row v-else v-show="false">
@@ -152,32 +152,32 @@
                         <v-col>
                           <v-menu v-model="toDateMenu_work" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y max-width="290px" min-width="290px">
                             <template v-slot:activator="{ on }">
-                              <v-text-field :id="'data_int_work' + index_work" v-if="eportefolio.trabalhos[index_work].em_curso" disabled label="Até" prepend-icon="mdi-calendar-outline" readonly v-on="on" name="data_fim"></v-text-field>
+                              <v-text-field :id="'data_int_work' + index_work" v-if="we.em_curso" disabled label="Até" prepend-icon="mdi-calendar-outline" readonly v-on="on" name="data_fim"></v-text-field>
                               <v-text-field :id="'data_int_work' + index_work" v-else label="Até" prepend-icon="mdi-calendar-outline" readonly :value="toDateDisp_work" v-on="on" name="data_fim"></v-text-field>
                             </template>
                             <v-date-picker locale="pt-pt" :min="minDate" :max="maxDate" v-model="toDateVal_work" no-title @input="toDateMenu_work= false"></v-date-picker>
                           </v-menu>
                         </v-col>
                         <v-col>
-                          <v-switch :id="'em_curso_work'+ index_work" label="Em curso" name="em_curso" :value="eportefolio.trabalhos[index_work].em_curso" @click="change_work_em_curso(index_work)"></v-switch> 
+                          <v-switch :id="'em_curso_work'+ index_work" label="Em curso" name="em_curso" :value="we.em_curso" @click="change_work_em_curso(index_work)"></v-switch> 
                         </v-col>
                       </v-row>
-                      <v-textarea :id="'responsabilidades' + index_work" v-if="edit_we_index == index_work" v-model="eportefolio.trabalhos[index_work].responsabilidades" prepend-icon="mdi-lightbulb" :rules="[v => !!v || 'Campo obrigatório']" label="Principais atividades e responsabilidades" name="responsabilidades" required></v-textarea>
-                      <v-textarea :id="'responsabilidades' + index_work" v-else v-show="false" v-model="eportefolio.trabalhos[index_work].responsabilidades" prepend-icon="mdi-lightbulb" :rules="[v => !!v || 'Campo obrigatório']" label="Principais atividades e responsabilidades" name="responsabilidades" required></v-textarea>
+                      <v-textarea :id="'responsabilidades' + index_work" v-if="edit_we_index == index_work" v-model="we.responsabilidades" prepend-icon="mdi-lightbulb" :rules="[v => !!v || 'Campo obrigatório']" label="Principais atividades e responsabilidades" name="responsabilidades" required></v-textarea>
+                      <v-textarea :id="'responsabilidades' + index_work" v-else v-show="false" v-model="we.responsabilidades" prepend-icon="mdi-lightbulb" :rules="[v => !!v || 'Campo obrigatório']" label="Principais atividades e responsabilidades" name="responsabilidades" required></v-textarea>
 
                       <v-checkbox v-if="edit_we_index == index_work" color="indigo" v-model="more_info_work" label="Mais informações"></v-checkbox>
 
-                      <v-text-field :id="'atividade' + index_work" v-if="edit_we_index == index_work && more_info_work" class="ml-10"  v-model="eportefolio.trabalhos[index_work].atividade_setor" prepend-icon="mdi-clipboard-text"  label="Atividade ou setor" name="atividade_setor"></v-text-field>
-                      <v-text-field :id="'atividade' + index_work" v-else v-show="false" class="ml-10"  v-model="eportefolio.trabalhos[index_work].atividade_setor" prepend-icon="mdi-clipboard-text"  label="Atividade ou setor" name="atividade_setor"></v-text-field>
-                      <v-text-field :id="'departamento' + index_work" v-if="edit_we_index == index_work && more_info_work" class="ml-10"  v-model="eportefolio.trabalhos[index_work].departamento" prepend-icon="mdi-account-details"  label="Departamento" name="departamento"></v-text-field>
-                      <v-text-field :id="'departamento' + index_work" v-else v-show="false" class="ml-10"  v-model="eportefolio.trabalhos[index_work].departamento" prepend-icon="mdi-account-details"  label="Departamento" name="departamento"></v-text-field>
-                      <v-text-field :id="'email_organizacao' + index_work" v-if="edit_we_index == index_work && more_info_work" class="ml-10"  v-model="eportefolio.trabalhos[index_work].email_organizacao" prepend-icon="mdi-email"  :rules="[emailRules]" label="E-mail da organização" name="email_organizacao"></v-text-field>
-                      <v-text-field :id="'email_organizacao' + index_work" v-else v-show="false" class="ml-10"  v-model="eportefolio.trabalhos[index_work].email_organizacao" prepend-icon="mdi-email"  :rules="[emailRules]" label="E-mail da organização" name="email_organizacao"></v-text-field>
-                      <v-text-field :id="'sitio_web' + index_work" v-if="edit_we_index == index_work && more_info_work" class="ml-10"  v-model="eportefolio.trabalhos[index_work].sitio_web" prepend-icon="mdi-file-link"  :rules="siteRules" label="Sítio web" name="sitio_web"></v-text-field>
-                      <v-text-field :id="'sitio_web' + index_work" v-else v-show="false" class="ml-10"  v-model="eportefolio.trabalhos[index_work].sitio_web" prepend-icon="mdi-file-link"  :rules="siteRules" label="Sítio web" name="sitio_web"></v-text-field>
-                      <v-text-field :id="'hiper' + index_work" v-if="edit_we_index == index_work && more_info_work" class="ml-10"  v-model="eportefolio.trabalhos[index_work].hiper" prepend-icon="mdi-link" :rules="siteRules" label="Hiperligação para ficheiro ou vídeo" name="hiper"></v-text-field>
-                      <v-text-field :id="'hiper' + index_work" v-else v-show="false" class="ml-10"  v-model="eportefolio.trabalhos[index_work].hiper" prepend-icon="mdi-link" :rules="siteRules" label="Hiperligação para ficheiro ou vídeo" name="hiper"></v-text-field>
-                      <!-- <v-text-field v-if="edit_we_index == index_work"  v-model="eportefolio.trabalhos[index_work].descricao" prepend-icon="mdi-card-text" :rules="[v => !!v || 'Campo obrigatório']" label="Descrição" name="descricao" required></v-text-field> -->
+                      <v-text-field :id="'atividade' + index_work" v-if="edit_we_index == index_work && more_info_work" class="ml-10"  v-model="we.atividade_setor" prepend-icon="mdi-clipboard-text"  label="Atividade ou setor" name="atividade_setor"></v-text-field>
+                      <v-text-field :id="'atividade' + index_work" v-else v-show="false" class="ml-10"  v-model="we.atividade_setor" prepend-icon="mdi-clipboard-text"  label="Atividade ou setor" name="atividade_setor"></v-text-field>
+                      <v-text-field :id="'departamento' + index_work" v-if="edit_we_index == index_work && more_info_work" class="ml-10"  v-model="we.departamento" prepend-icon="mdi-account-details"  label="Departamento" name="departamento"></v-text-field>
+                      <v-text-field :id="'departamento' + index_work" v-else v-show="false" class="ml-10"  v-model="we.departamento" prepend-icon="mdi-account-details"  label="Departamento" name="departamento"></v-text-field>
+                      <v-text-field :id="'email_organizacao' + index_work" v-if="edit_we_index == index_work && more_info_work" class="ml-10"  v-model="we.email_organizacao" prepend-icon="mdi-email"  :rules="[emailRules]" label="E-mail da organização" name="email_organizacao"></v-text-field>
+                      <v-text-field :id="'email_organizacao' + index_work" v-else v-show="false" class="ml-10"  v-model="we.email_organizacao" prepend-icon="mdi-email"  :rules="[emailRules]" label="E-mail da organização" name="email_organizacao"></v-text-field>
+                      <v-text-field :id="'sitio_web' + index_work" v-if="edit_we_index == index_work && more_info_work" class="ml-10"  v-model="we.sitio_web" prepend-icon="mdi-file-link"  :rules="siteRules" label="Sítio web" name="sitio_web"></v-text-field>
+                      <v-text-field :id="'sitio_web' + index_work" v-else v-show="false" class="ml-10"  v-model="we.sitio_web" prepend-icon="mdi-file-link"  :rules="siteRules" label="Sítio web" name="sitio_web"></v-text-field>
+                      <v-text-field :id="'hiper' + index_work" v-if="edit_we_index == index_work && more_info_work" class="ml-10"  v-model="we.hiper" prepend-icon="mdi-link" :rules="siteRules" label="Hiperligação para ficheiro ou vídeo" name="hiper"></v-text-field>
+                      <v-text-field :id="'hiper' + index_work" v-else v-show="false" class="ml-10"  v-model="we.hiper" prepend-icon="mdi-link" :rules="siteRules" label="Hiperligação para ficheiro ou vídeo" name="hiper"></v-text-field>
+                      <!-- <v-text-field v-if="edit_we_index == index_work"  v-model="we.descricao" prepend-icon="mdi-card-text" :rules="[v => !!v || 'Campo obrigatório']" label="Descrição" name="descricao" required></v-text-field> -->
                     </v-list>
                   </v-form>
                   <v-form ref="form_address_work" v-model="valid" lazy-validation class="mx-2 mb-1">
@@ -232,20 +232,20 @@
 
                 <v-stepper-content step="3">
                   <v-list v-for="(ef, index) in eportfolio.educacoes" :key="index">
-                    <v-card v-if="index < eportfolio.educacoes.length-1 && index != edit_ef_index" class="mx-auto" color="indigo" dark  rounded>
+                    <v-card v-if="index < eportfolio.educacoes.length && index != edit_ef_index" class="mx-auto" color="indigo" dark  rounded>
                       <v-card-title>
                         <v-icon small left>
                           mdi-clipboard-file-outline
                         </v-icon>
-                        <span class="text-subtitle-1 font-weight-light" >{{eportfolio.educacoes[index].titulo}}</span>
+                        <span class="text-subtitle-1 font-weight-light" >{{ef.titulo}}</span>
                       </v-card-title>
                   
                       <v-card-text class="text-subtitle-2 font-weight-bold my-n3">
-                        {{eportfolio.educacoes[index].organizacao}} | {{address_work[index].cidade}}
+                        {{ef.organizacao}} | {{address_education[index].cidade}}
                       </v-card-text>
 
                       <v-card-text class="text-h6 font-weight-bold mt-n7">
-                        {{eportfolio.educacoes[index].descricao}}
+                        {{ef.descricao}}
                       </v-card-text>
                   
                       <v-card-actions>
@@ -317,7 +317,7 @@
                         </v-col>
                       </v-row>
 
-                      <v-checkbox color="indigo" v-model="more_info_edu" label="Mais informações"></v-checkbox>
+                      <v-checkbox color="indigo" v-if="edit_ef_index == index_edu" v-model="more_info_edu" label="Mais informações"></v-checkbox>
 
                       <v-text-field :id="'area' + index_edu" class="ml-10" v-if="edit_ef_index == index_edu && more_info_edu" v-model="eportfolio.educacoes[index_edu].area" prepend-icon="mdi-clipboard-text" label="Área de estudo" name="area"></v-text-field>
                       <v-text-field :id="'area' + index_edu" class="ml-10" v-else v-show="false" v-model="eportfolio.educacoes[index_edu].area" prepend-icon="mdi-clipboard-text" label="Área de estudo" name="area"></v-text-field>
@@ -441,7 +441,9 @@
                   <v-form ref="form_skills" v-model="valid_skills" lazy-validation class="mx-2 mb-1">
                     <v-card-title class="indigo--text"><h3>Competências pessoais</h3></v-card-title>
                     <v-card-subtitle class="indigo--text">Descreve as tuas skills relativas a linguagens, carta de condução e competências digitais.</v-card-subtitle>
+                    <v-card-title class="black--text"><span class="font-weight-light mt-n2">Línguas maternas atuais: </span><h5>{{eportfolio.competencias_pessoais.lingua_materna.map(el => el.nome).toString().replace(/[|]/g, '')}}</h5></v-card-title>
                     <v-select multiple v-model="eportfolio.competencias_pessoais.lingua_materna" prepend-icon="mdi-flag-variant" :items="countries" label="Linguagem materna" name="lingua_materna" ></v-select>
+                    <v-card-title class="black--text"><span class="font-weight-light mt-n2">Línguas não maternas atuais: </span><h5>{{eportfolio.competencias_pessoais.outra_lingua.map(el => el.nome).toString().replace(/[|]/g, '')}}</h5></v-card-title>
                     <v-select multiple v-model="eportfolio.competencias_pessoais.outra_lingua" prepend-icon="mdi-flag-variant" :items="countries" label="Linguagem não materna " name="outra_lingua" ></v-select>
                     
                     <v-switch label="Carta de condução" name="carta_conducao" :value="eportfolio.competencias_pessoais.carta_conducao" @click="change_carta"></v-switch> 
@@ -451,7 +453,7 @@
                     <v-list>
                       <v-list-item class="ml-n4" v-for="(cd, index) in eportfolio.competencias_pessoais.comp_digital" :key="index">
                         <v-list-item-action>
-                          <v-text-field v-model="cd.nome" prepend-icon="mdi-laptop" label="Competência digital" name="comp_digital" ></v-text-field>
+                          <v-text-field v-model="cd.competencia" prepend-icon="mdi-laptop" label="Competência digital" name="comp_digital" ></v-text-field>
                         </v-list-item-action>
                       </v-list-item>
                       <v-btn class="ml-8 mt-n8" x-small text color="indigo--text" @click="add">Adicionar outra</v-btn>
@@ -465,7 +467,7 @@
 
                 <v-stepper-content step="5">
                   <v-list v-for="(ty, index) in eportfolio.tipos" :key="index">
-                    <v-card v-if="index < eportfolio.tipos.length-1 && index != edit_ty_index" class="mx-auto" color="indigo" dark  rounded>
+                    <v-card v-if="index < eportfolio.tipos.length && index != edit_ty_index" class="mx-auto" color="indigo" dark  rounded>
                       <v-card-title>
                         <v-icon small left>
                           mdi-clipboard-file-outline
@@ -656,6 +658,8 @@ export default {
 
     data () {
       return {
+        address_education:[],
+        address_work: [],
         loading: false,
         submitted: false,
         valid: true,
@@ -670,7 +674,6 @@ export default {
         emailRules: 
           v => !v || /.+@.+\..+/.test(v) || 'E-mail tem que ser válido',
         fileRules: [
-          v => !!v || 'Campo obrigatório',
           value => !value || value.size < 1000000 || 'Tamanho da foto no máximo com 1 MB!',
         ],
         siteRules: [
@@ -717,7 +720,7 @@ export default {
     },
 
 
-    created() {
+    async created() {
       this.fetchData()
 
       var curr = new Date()
@@ -731,6 +734,30 @@ export default {
       this.maxDate = year + '-' + month + '-' + day
 
       this.$store.dispatch('users/get_types')
+
+      for(var t of this.$store.state.users.eport.params.trabalhos){
+        console.log(t.endereco)
+        await this.$store.dispatch('users/get_address', { id : t.endereco })
+        this.address_work.push({
+          morada: this.$store.state.users.address.params.morada,
+          cod_post: this.$store.state.users.address.params.cod_post,
+          cidade: this.$store.state.users.address.params.cidade,
+          pais: this.$store.state.users.address.params.pais
+        }) 
+      }
+
+      for(var e of this.$store.state.users.eport.params.educacoes){
+        console.log(e.endereco)
+        await this.$store.dispatch('users/get_address', { id : e.endereco })
+        this.address_education.push({
+          morada: this.$store.state.users.address.params.morada,
+          cod_post: this.$store.state.users.address.params.cod_post,
+          cidade: this.$store.state.users.address.params.cidade,
+          pais: this.$store.state.users.address.params.pais
+        }) 
+      }
+
+      
     },
 
 
@@ -977,7 +1004,7 @@ export default {
         },
 
         change_work_em_curso(index){
-          this.eportefolio.trabalhos[index].em_curso = !this.eportefolio.trabalhos[index].em_curso
+          this.eportfolio.trabalhos[index].em_curso = !this.eportfolio.trabalhos[index].em_curso
         },
 
         change_education_em_curso(index){
@@ -989,7 +1016,7 @@ export default {
           var e = document.getElementById('ent_empregadora' + index).value
           var r = document.getElementById('responsabilidades' + index).value
           if(f != null && f != '' && e != null && e != '' && r != null && r != ''){
-            this.eportefolio.trabalhos.push({
+            this.eportfolio.trabalhos.push({
               funcao: '',
               ent_empregadora: '',
               cidade: '',
@@ -1060,7 +1087,7 @@ export default {
         },
 
         remove_we_index(index){
-          this.eportefolio.trabalhos.splice(index,1)
+          this.eportfolio.trabalhos.splice(index,1)
           if(this.edit_we_index != 0)
             this.edit_we_index -= 1
         },

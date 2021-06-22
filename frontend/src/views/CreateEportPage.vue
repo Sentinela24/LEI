@@ -317,7 +317,7 @@
                         </v-col>
                       </v-row>
 
-                      <v-checkbox color="indigo" v-model="more_info_edu" label="Mais informações"></v-checkbox>
+                      <v-checkbox v-if="edit_ef_index == index_edu" color="indigo" v-model="more_info_edu" label="Mais informações"></v-checkbox>
 
                       <v-text-field :id="'area' + index_edu" class="ml-10" v-if="edit_ef_index == index_edu && more_info_edu" v-model="education_formation[index_edu].area" prepend-icon="mdi-clipboard-text" label="Área de estudo" name="area"></v-text-field>
                       <v-text-field :id="'area' + index_edu" class="ml-10" v-else v-show="false" v-model="education_formation[index_edu].area" prepend-icon="mdi-clipboard-text" label="Área de estudo" name="area"></v-text-field>
@@ -382,7 +382,7 @@
                         </v-menu>
                       </div>
 
-                      <v-textarea :id="'descricao' + index_edu" class="ml-10" v-if="edit_ef_index == index_edu && more_info_edu" v-model="education_formation[index_edu].descricao" prepend-icon="mdi-lightbulb" label="Skills desenvolvidas" name="descricao"></v-textarea>
+                      <v-textarea :id="'descricao' + index_edu" class="ml-10" v-if="edit_ef_index == index_edu && more_info_edu" :rules="[v => !!v || 'Campo obrigatório']" v-model="education_formation[index_edu].descricao" prepend-icon="mdi-lightbulb" label="Skills desenvolvidas" name="descricao"></v-textarea>
                       <v-textarea :id="'descricao' + index_edu" class="ml-10" v-else v-show="false" v-model="education_formation[index_edu].descricao" prepend-icon="mdi-lightbulb" label="Skills desenvolvidas" name="descricao"></v-textarea>
                       <v-card-subtitle class="indigo--text ml-10" v-if="edit_ef_index == index_edu && more_info_edu">Endereço</v-card-subtitle>
                     </v-list>
@@ -451,7 +451,7 @@
                     <v-list>
                       <v-list-item class="ml-n4" v-for="(cd, index) in skills.comp_digital" :key="index">
                         <v-list-item-action>
-                          <v-text-field v-model="cd.nome" prepend-icon="mdi-laptop" label="Competência digital" name="comp_digital" ></v-text-field>
+                          <v-text-field v-model="cd.competencia" prepend-icon="mdi-laptop" label="Competência digital" name="comp_digital" ></v-text-field>
                         </v-list-item-action>
                       </v-list-item>
                       <v-btn class="ml-8 mt-n8" x-small text color="indigo--text" @click="add">Adicionar outra</v-btn>
@@ -702,7 +702,7 @@ export default {
           carta_conducao: false,
           lingua_materna: [],
           outra_lingua: [],
-          comp_digital: [{nome : ''}],
+          comp_digital: [{competencia: ''}],
           descricao: ''
         },
         address: {
@@ -765,10 +765,6 @@ export default {
         fromDateVal_education: null,
         toDateMenu_education: false,
         toDateVal_education: null,
-        fromDateMenu_skills: false,
-        fromDateVal_skills: null,
-        toDateMenu_skills: false,
-        toDateVal_skills: null,
         validDateMenu: false,
         validDateVal: null,
         minDate: "1930-07-04",
@@ -870,18 +866,18 @@ export default {
 
               console.log("Current: " + currentElement.name)
               if(currentElement.name == 'tipo')
-                data[currentElement.name] = { nome : currentElement.value, campo_int : [], campo_txt : []}
+                data = { nome : currentElement.value, campo_int : [], campo_txt : []}
               else if(currentElement.name == 'tipo_int'){
-                if(typeof data['tipo'].campo_int === 'undefined')
-                  data['tipo'].campo_int = [{nome : currentElement.value, valor: formElements[i+1].value}]
+                if(typeof data.campo_int === 'undefined')
+                  data.campo_int = [{nome : currentElement.value, valor: formElements[i+1].value}]
                 else
-                  data['tipo'].campo_int.push({nome : currentElement.value, valor: formElements[i+1].value})
+                  data.campo_int.push({nome : currentElement.value, valor: formElements[i+1].value})
               }
               else if(currentElement.name == 'tipo_txt'){
-                if(typeof data['tipo'].campo_txt === 'undefined')
-                  data['tipo'].campo_txt = [{'nome' : currentElement.value, 'descricao': formElements[i+1].value}]
+                if(typeof data.campo_txt === 'undefined')
+                  data.campo_txt = [{'nome' : currentElement.value, 'descricao': formElements[i+1].value}]
                 else
-                  data['tipo'].campo_txt.push({'nome' : currentElement.value, 'descricao': formElements[i+1].value})
+                  data.campo_txt.push({'nome' : currentElement.value, 'descricao': formElements[i+1].value})
               }  
               else if(currentElement.name == 'data_ini' && typeof data['data_int'] === 'undefined')
                 data['data_int'] = { inicio : currentElement.value, fim: '' }
@@ -928,9 +924,9 @@ export default {
               }
               else if(currentElement.name == 'comp_digital'){
                 if(typeof data[currentElement.name] === 'undefined')
-                  data[currentElement.name] = [{ "nome" : currentElement.value}]  
+                  data[currentElement.name] = [{ "competencia" : currentElement.value}]  
                 else
-                  data[currentElement.name].push({"nome" : currentElement.value})
+                  data[currentElement.name].push({"competencia" : currentElement.value})
               }
               else if(currentElement.name)
                   data[currentElement.name] = currentElement.value;
@@ -1018,7 +1014,7 @@ export default {
         },
 
         add(){
-          this.skills.comp_digital.push({"nome" : ''})
+          this.skills.comp_digital.push({"competencia" : ''})
           console.log(this.skills.comp_digital)
         },
 

@@ -13,7 +13,7 @@
               <h6>Mantém o teu ePortefolio atualizado, adiciona novas secções e informação a qualquer altura.</h6>
             </v-card-text>
             <v-card :loading="loading" class="indigo lighten-5 mx-auto my-2" max-width="830">       
-              <v-container fluid> 
+              <v-container fluid id="document"> 
                 <v-list class="indigo lighten-5" >
                   <v-row> 
                     <v-col >
@@ -24,7 +24,7 @@
                       </v-list-item>
                     </v-col>
                     <v-col cols="7">
-                      <v-list-item class="my-n4">
+                      <v-list-item >
                         <v-list-item-content>
                           <v-list-item-title class="indigo--text"><h4>Dados pessoais</h4></v-list-item-title>
                         </v-list-item-content>
@@ -145,7 +145,7 @@
                           </v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item class="my-n4" v-if="(typeof eport.params.endereco.pais !== 'undefined')">
+                        <v-list-item id="dados_pessoais" class="my-n4" v-if="(typeof eport.params.endereco.pais !== 'undefined')">
                           <v-list-item-action>
                             <v-icon color="indigo">mdi-flag-outline</v-icon>
                           </v-list-item-action>
@@ -155,35 +155,39 @@
                           </v-list-item-title>
                         </v-list-item>
                       </v-list>
-                        
                     </v-col>
-                    <v-col>
+                    <v-col data-html2canvas-ignore="true">
                       <v-btn class="edit" icon to="/editar-eportefolio" color="indigo"><v-icon>mdi-pencil</v-icon></v-btn>
                     </v-col>
                   </v-row>
                 </v-list>
                 
-                <v-checkbox color="indigo" v-model="work_experience" label="Experiência professional"></v-checkbox>
+                <div data-html2canvas-ignore="true">
+                  <v-checkbox color="indigo" v-model="work_experience" label="Experiência professional"></v-checkbox>
+                </div>
 
-                <v-list v-if="work_experience" class="indigo lighten-5" >
+                <v-list id="work" v-if="work_experience"  class="indigo lighten-5" >
+                  <v-card-title><h3>Experiências profissionais</h3></v-card-title>
                   <v-list v-for="(work, index) in eport.params.trabalhos" :key="index" class="indigo lighten-5">
-
-                    <v-card  class="mx-auto" color="indigo" dark rounded>
+                    <v-card class="mx-auto" color="indigo" dark rounded>
                       <v-card-title>
                         <v-icon small left class="black--text">
                           mdi-clipboard-file-outline
                         </v-icon>
                         <span class="black--text text-subtitle-1 font-weight-bold" >{{work.funcao}}</span>
                       </v-card-title>
-                      <v-card-text class="text-subtitle-2 font-weight-bold my-n3">
-                        {{work.ent_empregadora}} | <!-- {{work.endereco[]}} -->
+                      <v-card-text v-if="work['em_curso'] == true" class="text-subtitle-2 font-weight-bold my-n3">
+                        {{work.ent_empregadora}} | {{ new Date(work['data_int'].inicio).getDate() + '/' + (new Date(work['data_int'].inicio).getMonth()+1) + '/' + new Date(work['data_int'].inicio).getFullYear() }} - EM CURSO
+                      </v-card-text>
+                      <v-card-text v-else class="text-subtitle-2 font-weight-bold my-n3">
+                        {{work.ent_empregadora}} | {{ new Date(work['data_int'].inicio).getDate() + '/' + (new Date(work['data_int'].inicio).getMonth()+1) + '/' + new Date(work['data_int'].inicio).getFullYear() }} - {{ new Date(work['data_int'].fim).getDate() + '/' + (new Date(work['data_int'].fim).getMonth()+1) + '/' + new Date(work['data_int'].fim).getFullYear() }}
                       </v-card-text>
                       <v-card-text class="text-h6 font-weight-bold mt-n7">
                         {{work.responsabilidades}}
                       </v-card-text>
                     </v-card>
 
-                    <v-expansion-panels  class="indigo mt-n3" flat dark>
+                    <v-expansion-panels data-html2canvas-ignore="true"  class="indigo mt-n3" flat dark>
                       <v-expansion-panel class="indigo" flat  dark>
                         <v-expansion-panel-header class="indigo">
                           <v-row>
@@ -193,9 +197,9 @@
                             </v-col>
                           </v-row>
                         </v-expansion-panel-header>
-                        <v-expansion-panel-content class="mt-n16" >
+                        <v-expansion-panel-content>
                           <v-list v-for="(elem, index_elem) in work" :key="index_elem" class="indigo">
-                            <v-list-item v-if="work[index_elem] != null && index_elem != 'em_curso' && index_elem != 'id' && index_elem != 'eportfolio' && index_elem != 'updatedAt' && index_elem != '_id' && index_elem != 'cidade' && index_elem != 'funcao' && index_elem != 'ent_empregadora' && index_elem != 'responsabilidades'" class="my-n4">
+                            <v-list-item v-if="work[index_elem] != null && work[index_elem] != '' && index_elem != 'em_curso' && index_elem != 'id' && index_elem != 'eportfolio' && index_elem != 'updatedAt' && index_elem != 'createdAt' &&  index_elem != '_id' && index_elem != 'cidade' && index_elem != 'funcao' && index_elem != 'ent_empregadora' && index_elem != 'responsabilidades' && index_elem != 'endereco' && index_elem != '__v'" class="my-n4">
                               <v-list-item-content v-if="index_elem == 'valido_ate'">
                                 <span color="indigo lighten-5" class="font-weight-light" style="display:inline;">{{ (index_elem[0].toUpperCase() + index_elem.slice(1)).replace('_', ' ') }}:</span> 
                                 <span class="font-weight-bold">{{ new Date(work[index_elem].inicio).getDate() + '/' + (new Date(work[index_elem].inicio).getMonth()+1) + '/' + new Date(work[index_elem].inicio).getFullYear() }}</span>
@@ -210,20 +214,21 @@
                                 <span v-else class="font-weight-bold">{{ new Date(work[index_elem].inicio).getDate() + '/' + (new Date(work[index_elem].inicio).getMonth()+1) + '/' + new Date(work[index_elem].inicio).getFullYear() }} - {{ new Date(work[index_elem].fim).getDate() + '/' + (new Date(work[index_elem].fim).getMonth()+1) + '/' + new Date(work[index_elem].fim).getFullYear() }}</span>
                               </v-list-item-content>
                             </v-list-item>
-                              <v-divider v-if="work[index_elem] != null && index_elem != 'em_curso' && index_elem != 'id' && index_elem != 'eportfolio' && index_elem != 'updatedAt'  && index_elem != '_id' && index_elem != 'cidade' && index_elem != 'funcao' && index_elem != 'ent_empregadora' && index_elem != 'responsabilidades'" inset></v-divider>
+                              <v-divider v-if="work[index_elem] != null && work[index_elem] != '' && index_elem != 'em_curso' && index_elem != 'id' && index_elem != 'eportfolio' && index_elem != 'updatedAt' && index_elem != 'createdAt' && index_elem != '_id' && index_elem != 'cidade' && index_elem != 'funcao' && index_elem != 'ent_empregadora' && index_elem != 'responsabilidades' && index_elem != 'endereco' && index_elem != '__v'" inset></v-divider>
                           </v-list>
                         </v-expansion-panel-content>
                       </v-expansion-panel>
                     </v-expansion-panels>
-
                   </v-list>
                 </v-list>
 
-                <v-checkbox color="indigo" v-model="education" label="Educação e formação"></v-checkbox>
+                <div data-html2canvas-ignore="true">
+                  <v-checkbox color="indigo" v-model="education" label="Educação e formação"></v-checkbox>
+                </div>
 
-                <v-list v-if="education" class="indigo lighten-5" >
+                <v-list id="edu" v-if="education" class="indigo lighten-5" >
+                  <v-card-title><h3>Educação e formação</h3></v-card-title>
                   <v-list v-for="(edu, index) in eport.params.educacoes" :key="index" class="indigo lighten-5">
-
                     <v-card  class="mx-auto" color="indigo" dark rounded>
                       <v-card-title>
                         <v-icon small left class="black--text">
@@ -231,15 +236,18 @@
                         </v-icon>
                         <span class="black--text text-subtitle-1 font-weight-bold" >{{edu.titulo}}</span>
                       </v-card-title>
-                      <v-card-text class="text-subtitle-2 font-weight-bold my-n3">
-                        {{edu.organizacao}} | <!-- {{edu.endereco[]}} -->
+                      <v-card-text v-if="edu['em_curso'] == true" class="text-subtitle-2 font-weight-bold my-n3">
+                        {{edu.organizacao}} | {{ new Date(edu['data_int'].inicio).getDate() + '/' + (new Date(edu['data_int'].inicio).getMonth()+1) + '/' + new Date(edu['data_int'].inicio).getFullYear() }} - EM CURSO
+                      </v-card-text>
+                      <v-card-text v-else class="text-subtitle-2 font-weight-bold my-n3">
+                        {{edu.organizacao}} | {{ new Date(edu['data_int'].inicio).getDate() + '/' + (new Date(edu['data_int'].inicio).getMonth()+1) + '/' + new Date(edu['data_int'].inicio).getFullYear() }} - {{ new Date(edu['data_int'].fim).getDate() + '/' + (new Date(edu['data_int'].fim).getMonth()+1) + '/' + new Date(edu['data_int'].fim).getFullYear() }}
                       </v-card-text>
                       <v-card-text class="text-h6 font-weight-bold mt-n7">
                         {{edu.descricao}}
                       </v-card-text>
                     </v-card>
 
-                    <v-expansion-panels  class="indigo mt-n3" flat dark>
+                    <v-expansion-panels data-html2canvas-ignore="true"   class="indigo mt-n3" flat dark>
                       <v-expansion-panel class="indigo" flat  dark>
                         <v-expansion-panel-header class="indigo">
                           <v-row>
@@ -251,7 +259,7 @@
                         </v-expansion-panel-header>
                         <v-expansion-panel-content>
                           <v-list v-for="(elem, index_elem) in edu" :key="index_elem" class="indigo">
-                            <v-list-item v-if="edu[index_elem] != null && index_elem != 'em_curso' && index_elem != 'id' && index_elem != 'eportfolio' && index_elem != 'updatedAt' && index_elem != '_id' && index_elem != 'area' && index_elem != 'titulo' && index_elem != 'organizacao' && index_elem != 'descricao'" class="my-n4">
+                            <v-list-item v-if="edu[index_elem] != null && edu[index_elem] != '' && index_elem != 'em_curso' && index_elem != 'id' && index_elem != 'eportfolio' && index_elem != 'updatedAt' && index_elem != '_id' && index_elem != 'area' && index_elem != 'titulo' && index_elem != 'organizacao' && index_elem != 'descricao' && index_elem != 'endereco' && index_elem != '__v' && index_elem != 'createdAt'" class="my-n4">
                               <v-list-item-content v-if="index_elem != 'data_int'">
                                 <span color="indigo lighten-5" class="font-weight-light" style="display:inline;">{{ (index_elem[0].toUpperCase() + index_elem.slice(1)).replace('_', ' ') }}:</span> 
                                 <span class="font-weight-bold">{{ edu[index_elem] }}</span>
@@ -262,7 +270,7 @@
                                 <span v-else class="font-weight-bold">{{ new Date(edu[index_elem].inicio).getDate() + '/' + (new Date(edu[index_elem].inicio).getMonth()+1) + '/' + new Date(edu[index_elem].inicio).getFullYear() }} - {{ new Date(edu[index_elem].fim).getDate() + '/' + (new Date(edu[index_elem].fim).getMonth()+1) + '/' + new Date(edu[index_elem].fim).getFullYear() }}</span>
                               </v-list-item-content>
                             </v-list-item>
-                              <v-divider v-if="edu[index_elem] != null && index_elem != 'em_curso' && index_elem != 'id' && index_elem != 'eportfolio' && index_elem != 'updatedAt'  && index_elem != '_id' && index_elem != 'area' && index_elem != 'titulo' && index_elem != 'organizacao' && index_elem != 'descricao'" inset></v-divider>
+                            <v-divider v-if="edu[index_elem] != null && edu[index_elem] != '' && index_elem != 'em_curso' && index_elem != 'id' && index_elem != 'eportfolio' && index_elem != 'updatedAt'  && index_elem != '_id' && index_elem != 'area' && index_elem != 'titulo' && index_elem != 'organizacao' && index_elem != 'descricao' && index_elem != 'endereco' && index_elem != '__v' && index_elem != 'createdAt'" inset></v-divider>
                           </v-list>
                         </v-expansion-panel-content>
                       </v-expansion-panel>
@@ -271,9 +279,12 @@
                   </v-list>
                 </v-list>
 
-                <v-checkbox color="indigo" v-model="personal_skills" label="Competências pessoais"></v-checkbox>
+                <div data-html2canvas-ignore="true">
+                  <v-checkbox color="indigo" v-model="personal_skills" label="Competências pessoais"></v-checkbox>
+                </div>
 
-                <v-list v-if="personal_skills" class="indigo lighten-5" >
+                <v-list id="skills" v-if="personal_skills" class="indigo lighten-5" >
+                  <v-card-title><h3>Competências pessoais</h3></v-card-title>
                   <v-card  class="mx-auto" color="indigo" dark rounded>
                     <v-card-title>
                       <v-icon v-if="eport.params.competencias_pessoais.carta_conducao" small left class="black--text">
@@ -288,7 +299,7 @@
                        <span color="indigo lighten-5" class="font-weight-light" style="display:inline;">Línguas maternas:</span> 
                     </v-card-text>
                     <v-list class="indigo mt-n6" v-for="(lm, index_elem) in eport.params.competencias_pessoais['lingua_materna']" :key="index_elem">
-                        <v-list-item>
+                        <v-list-item v-if="lm.nome != ''">
                           <v-list-item-title>- {{lm.nome}}</v-list-item-title>
                         </v-list-item>
                     </v-list>
@@ -296,7 +307,7 @@
                       <span color="indigo lighten-5" class="font-weight-light" style="display:inline;">Línguas não maternas:</span> 
                     </v-card-text>
                     <v-list class="indigo mt-n6" v-for="(lm, index_ele) in eport.params.competencias_pessoais['outra_lingua']" :key="index_ele">
-                        <v-list-item>
+                        <v-list-item v-if="lm.nome != ''">
                           <v-list-item-title>- {{lm.nome}}</v-list-item-title>
                         </v-list-item>
                     </v-list>
@@ -304,18 +315,20 @@
                       <span color="indigo lighten-5" class="font-weight-light" style="display:inline;">Competências digitais:</span> 
                     </v-card-text>
                     <v-list class="indigo mt-n6" v-for="(lm, index_el) in eport.params.competencias_pessoais['comp_digital']" :key="index_el">
-                        <v-list-item>
+                        <v-list-item v-if="lm.competencia != ''">
                           <v-list-item-title>- {{lm.competencia}}</v-list-item-title>
                         </v-list-item>
                     </v-list>
                   </v-card>
                 </v-list>
 
-                <v-checkbox color="indigo" v-model="extra" label="Informação extra"></v-checkbox>
+                <div data-html2canvas-ignore="true">
+                  <v-checkbox color="indigo" v-model="extra" label="Informação extra"></v-checkbox>
+                </div>
 
-                <v-list v-if="extra" class="indigo lighten-5" >
+                <v-list id="extra" v-if="extra" class="indigo lighten-5" >
+                  <v-card-title><h3>Informação extra</h3></v-card-title>
                   <v-list v-for="(tipo, index) in eport.params.tipos" :key="index" class="indigo lighten-5">
-
                     <v-card  class="mx-auto" color="indigo" dark rounded>
                       <v-card-title>
                         <v-icon small left class="black--text">
@@ -323,41 +336,25 @@
                         </v-icon>
                         <span class="black--text text-subtitle-1 font-weight-bold" >{{tipo.nome }}</span>
                       </v-card-title>
-                    </v-card>
-
-                    <v-expansion-panels  class="indigo mt-n3" flat dark>
-                      <v-expansion-panel class="indigo" flat  dark>
-                        <v-expansion-panel-header class="indigo">
-                          <v-row>
-                            <v-col cols="9"></v-col>
-                            <v-col class="white--text">
-                              Mais informações
-                            </v-col>
-                          </v-row>
-                        </v-expansion-panel-header>
-                        <v-expansion-panel-content>
-                          <v-list v-for="(elem, index_elem) in tipo.campo_int" :key="index_elem" class="indigo">
-                            <v-list-item class="my-n4">
-                              <v-list-item-content >
+                      <v-list v-for="(elem, index_elem) in tipo.campo_int" :key="index_elem" class="indigo">
+                            <v-list-item v-if="tipo.campo_int[index_elem].nome != '' && tipo.campo_int[index_elem].valor != ''" class="my-n4">
+                              <v-list-item-content>
                                 <span color="indigo lighten-5" class="font-weight-light" style="display:inline;">{{ tipo.campo_int[index_elem].nome }}:</span> 
                                 <span class="font-weight-bold">{{ tipo.campo_int[index_elem].valor }}</span>
                               </v-list-item-content>
                             </v-list-item>
-                              <v-divider inset></v-divider>
+                              <v-divider v-if="tipo.campo_int[index_elem].nome != '' && tipo.campo_int[index_elem].valor != ''" inset></v-divider>
                           </v-list>
                           <v-list v-for="(elem, index_ele) in tipo.campo_txt" :key="index_ele" class="indigo">
-                            <v-list-item class="my-n4">
+                            <v-list-item v-if="tipo.campo_txt[index_ele].nome != '' && tipo.campo_txt[index_ele].descricao != ''" class="my-n4">
                               <v-list-item-content >
                                 <span color="indigo lighten-5" class="font-weight-light" style="display:inline;">{{ tipo.campo_txt[index_ele].nome }}:</span> 
                                 <span class="font-weight-bold">{{ tipo.campo_txt[index_ele].descricao }}</span>
                               </v-list-item-content>
                             </v-list-item>
-                              <v-divider inset></v-divider>
+                            <v-divider v-if="tipo.campo_txt[index_ele].nome != '' && tipo.campo_txt[index_ele].descricao != ''" inset></v-divider>
                           </v-list>
-                        </v-expansion-panel-content>
-                      </v-expansion-panel>
-                    </v-expansion-panels>
-
+                    </v-card>
                   </v-list>
                 </v-list>
 
@@ -370,14 +367,7 @@
               </v-card-actions> 
             </v-card>
           </v-card>
-          <div ref="document">
-            <div ref="hide" hidden>
-            <img src="http://localhost:1337/uploads/desktop_2325627_1920_d50af40d6d.jpg">
-            <v-card>
-              <v-card-title>adadada</v-card-title>
-            </v-card>
-            </div>
-          </div>
+          
         </v-container>
     </div>
 </template>
@@ -463,21 +453,27 @@ export default {
 
 
       exportToPDF () {
-        let data = Object.assign({}, this.$refs)
-        console.log(data)
-        var element = data.document
+        this.work_experience = true
+        this.education = true
+        this.personal_skills = true
+        this.extra = true
+        var element = document.getElementById('document');
         var opt = {
-          margin: 1,
+          margin:1,
           filename:'eportefolio.pdf',
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas:  { scale: 2 },
-          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+          image: { type: 'jpeg', quality: 0.95 },
+          pagebreak: {  after:['#dados_pessoais']},
+          html2canvas: { scale:2,
+useCORS: true, y:0, scrollY: 0
+},
+          jsPDF: { unit: 'mm', orientation: 'portrait', format:'a4' },
         };
         // New Promise-based usage:
-        html2pdf().set(opt).from(element).save();
+        //html2pdf().set(opt).from(element).save();
         // Old monolithic-style usage:
-        //html2pdf(element, opt);
+        html2pdf(element, opt);
 		  },
+
 
       async selectSection(index) {
         if (this.items[index].path)

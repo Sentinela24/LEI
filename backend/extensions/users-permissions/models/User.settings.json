@@ -60,8 +60,8 @@
       "configurable": false
     },
     "eportfolios": {
-      "collection": "eportfolio",
-      "via": "user"
+      "via": "user",
+      "collection": "eportfolio"
     },
     "cvs": {
       "collection": "file",

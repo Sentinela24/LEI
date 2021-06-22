@@ -25,10 +25,6 @@
     },
     "descricao": {
       "type": "text"
-    },
-    "eportfolio": {
-      "via": "competencias_pessoais",
-      "model": "eportfolio"
     }
   }
 }

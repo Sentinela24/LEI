@@ -2,7 +2,7 @@
     <div>
         <NavBar/>
         <v-container v-if="(typeof user.params !== 'undefined')" fluid>
-            <v-card flat class="mx-auto my-3" max-width="920">
+          <v-card flat class="mx-auto my-3" max-width="920">
             <v-toolbar flat class="indigo--text text-h1 display-3" >
               <v-toolbar-title>
                 <h2>A minha conta</h2>
@@ -40,6 +40,19 @@
                  </v-list>
                 <v-btn plain class=" ml-1 mb-1" color="indigo" text @click="handleSubmit"><v-icon size="20">mdi-pencil</v-icon>&nbsp;<span class="font-weight-bold">Editar</span></v-btn>
               </v-card>
+
+              <v-card v-if="edit_pass" class="indigo lighten-5 mx-auto my-10" max-width="830">
+                <v-toolbar class="my-3 indigo white--text text-h1 display-3" dark>
+                  <v-toolbar-title>
+                      <h2>Alterar Password</h2>
+                  </v-toolbar-title>
+                  <v-progress-linear :active="loading" absolute color="green" bottom :indeterminate="loading"></v-progress-linear>
+                </v-toolbar>
+                <v-form ref="form" v-model="valid" lazy-validation class="mx-2 mb-1">
+                  <v-text-field type="password" v-model="user.params.eportfolios[0].password" prepend-icon="mdi-lock"  :rules="passwordRules" label="Nova password" name="password" required></v-text-field>  
+                  <v-btn plain class=" ml-1 mb-1" color="indigo" text @click="validate"><v-icon size="20">mdi-pencil</v-icon>&nbsp;<span class="font-weight-bold">Alterar</span></v-btn>
+                </v-form>
+              </v-card>
             </v-card>
         </v-container>
     </div>
@@ -49,7 +62,6 @@
 import { VContainer, VRow, VCol, VLayout, VImg, VCard, VCardText, VCardTitle, VCardSubtitle, VDivider, VCardActions, VProgressLinear, VList, VListItem, VListItemTitle,  VListItemAction, VListItemContent, VAppBarNavIcon, VToolbarTitle, VMenu, VCheckbox, VListItemAvatar, VTextField, VListItemGroup, VForm } from 'vuetify/lib'
 import NavBar from '../components/NavBar'
 import html2pdf from 'html2pdf.js'
-import { type } from 'os';
 
 export default {
     data: () => ({
@@ -61,8 +73,8 @@ export default {
           { type: 'email', icon: 'mdi-email'}
       ],
       items: [
-        { title: 'Alterar Password', path: '/editar-perfil', click() { this.$router.push('/editar-perfil')} },
-        { title: 'Apagar conta', click() {} },
+        { title: 'Alterar Password' },
+        { title: 'Apagar conta' },
       ],
       username: '',
       email: '',
@@ -71,7 +83,12 @@ export default {
       address: false,
       personal_skills: false,
       personal_info: true,
-      strapi_url: 'http://localhost:1337'
+      strapi_url: 'http://localhost:1337',
+      edit_pass: false,
+      passwordRules: [
+        v => (v && v.length >= 6) || 'Password tem que ter no mínimo 6 caracteres',
+      ],
+      valid: true
     }),
 
     components: {
@@ -105,7 +122,6 @@ export default {
 
     computed: {
         user () {
-          console.log("User: "+ JSON.stringify(this.$store.state.users.user));
           if(typeof this.$store.state.users.user.params !== 'undefined' && (this.username == '' || this.email == '')){
             this.username = this.$store.state.users.user.params.username
             this.email = this.$store.state.users.user.params.email
@@ -141,8 +157,8 @@ export default {
         },
 
         async selectSection(index) {
-            if (this.items[index].path)
-                this.items[index].click.call(this)
+            if (this.items[index].title == 'Alterar Password')
+                this.edit_pass = true
             else
                 await this.$store.dispatch('users/delete_account', {user : this.user.params})
         },
@@ -154,7 +170,35 @@ export default {
                 await this.$store.dispatch('users/edit_account',{user : this.user.params} );
                 this.loading = false;
             }
-          }
+        },
+
+        validate () {
+          console.log(this.$refs.form)
+            if(this.$refs.form.validate()){
+                const formElement = this.$refs.form.$el
+                const formData = new FormData();
+                const formElements = formElement.elements;
+                const data = {};
+
+                for (let i = 0; i < formElements.length; i++) {
+                    const currentElement = formElements[i];
+                    console.log(currentElement)
+                    if (!['submit', 'file', 'button'].includes(currentElement.type)) {
+                        if('radio'.includes(currentElement.type)){
+                            if(currentElement.checked)
+                                data[currentElement.name] = currentElement.value;
+                        }
+                        else{
+                            data[currentElement.name] = currentElement.value;
+                        }
+
+                    } 
+                }
+                formData.append('data', JSON.stringify(data));
+                console.log("FormData: " + JSON.stringify(data))
+                this.$store.dispatch('users/editPerfil', { password: data, user : this.$store.state.users.user.params })
+            }
+        },
     },
 
     created () {
