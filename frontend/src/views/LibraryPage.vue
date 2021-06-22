@@ -115,7 +115,7 @@
                   <h5>Pode criar a partir do seu ePortefolio ou criar de raíz.</h5>
                 </v-card-text>
                 <v-card-actions class="mt-n7">
-                  <v-btn class="mx-2" color="indigo" dark  elevation="3" @click="criar_popup = false">
+                  <v-btn class="mx-2" color="indigo" dark  elevation="3" @click="eportToCV_popup = true">
                     Seu ePortefolio
                   </v-btn>
                   <v-btn class="mx-2 criar" color="indigo" text elevation="3" to="/criar-eportfolio">
@@ -155,16 +155,290 @@
               </v-card>
             </v-dialog>
 
+            <v-dialog  v-model="eportToCV_popup" max-width="850">
+              <v-card color="indigo lighten-5" max-width="830">     
+                <v-container fluid id="document"> 
+                  <v-list class="indigo lighten-5" >
+                    <v-row> 
+                      <v-col >
+                        <v-list-item>
+                          <v-list-item-avatar size="200">
+                            <v-img class="mx-auto" :src="user.params.eportfolios[0].avatar.url.split('/uploads/').join(`${this.strapi_url}/uploads/`)"></v-img>
+                          </v-list-item-avatar>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="7">
+                        <v-list-item >
+                          <v-list-item-content>
+                            <v-list-item-title class="indigo--text"><h4>Dados pessoais</h4></v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+
+                        <v-divider class="mr-16 mt-n4"></v-divider>
+
+                        <v-list-item class="my-n4">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <span class="font-weight-light" style="display:inline;">Nome:</span> 
+                              <span class="font-weight-bold">{{user.params.eportfolios[0].nome.substr(0, 30)}}</span>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item> 
+
+                        <v-list-item class="my-n4" v-if="(typeof user.params.eportfolios[0].nacionalidade !== 'undefined')">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <span class="font-weight-light" style="display:inline;">País de origem:</span> 
+                              <span class="font-weight-bold">{{user.params.eportfolios[0].nacionalidade}}</span>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item> 
+
+                        <v-list-item class="my-n4" v-if="(typeof user.params.eportfolios[0].genero !== 'undefined')">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <span class="font-weight-light" style="display:inline;">Género:</span> 
+                              <span class="font-weight-bold">{{user.params.eportfolios[0].genero}}</span>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item> 
+
+                        <v-list-item class="my-n4">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <span class="font-weight-light" style="display:inline;">Data de nascimento:</span> 
+                              <span class="font-weight-bold">{{user.params.eportfolios[0].data_nasc.substr(0,10)}}</span>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item> 
+
+                        <v-list-item class="my-n4" v-if="(typeof user.params.eportfolios[0].profissao !== 'undefined')">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <span class="font-weight-light" style="display:inline;">Profissão:</span> 
+                              <span class="font-weight-bold">{{user.params.eportfolios[0].profissao}}</span>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item> 
+
+                        <v-list-item class="mb-n4 mt-4">
+                          <v-list-item-content>
+                            <v-list-item-title class="indigo--text"><h4>Contacto</h4></v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>  
+
+                        <v-divider class="mr-16 mt-n4"></v-divider> 
+
+                        <v-list-item class="my-n4">
+                          <v-list-item-action>
+                            <v-icon color="indigo">mdi-email</v-icon>
+                          </v-list-item-action>
+                          <v-list-item-title class="ml-n6">
+                            <span class="font-weight-light" style="display:inline;">Email:</span> 
+                            <span class="font-weight-bold">{{user.params.eportfolios[0].email}}</span>
+                          </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item class="my-n4">
+                          <v-list-item-action>
+                            <v-icon color="indigo">mdi-phone</v-icon>
+                          </v-list-item-action>
+                          <v-list-item-title class="ml-n6">
+                            <span class="font-weight-light" style="display:inline;">Telemóvel:</span> 
+                            <span class="font-weight-bold">{{user.params.eportfolios[0].telemovel}}</span>
+                          </v-list-item-title>
+                        </v-list-item> 
+
+
+                        <v-list color="indigo lighten-5" v-if="(typeof eport.params.endereco !== 'undefined')">
+                          <v-list-item class="mb-n4 mt-4">
+                            <v-list-item-content>
+                              <v-list-item-title class="indigo--text"><h4>Endereço</h4></v-list-item-title>
+                            </v-list-item-content>
+                          </v-list-item>  
+
+                          <v-divider class="mr-16 mt-n4"></v-divider> 
+
+                          <v-list-item class="my-n4" v-if="(typeof eport.params.endereco.morada !== 'undefined')">
+                            <v-list-item-action>
+                              <v-icon color="indigo">mdi-home</v-icon>
+                            </v-list-item-action>
+                            <v-list-item-title class="ml-n6">
+                              <span class="font-weight-light" style="display:inline;">Morada:</span> 
+                              <span class="font-weight-bold">{{eport.params.endereco.morada}}</span>
+                            </v-list-item-title>
+                          </v-list-item>
+
+                          <v-list-item class="my-n4" v-if="(typeof eport.params.endereco.cod_post !== 'undefined')">
+                            <v-list-item-action>
+                              <v-icon color="indigo">mdi-home-outline</v-icon>
+                            </v-list-item-action>
+                            <v-list-item-title class="ml-n6">
+                              <span class="font-weight-light" style="display:inline;">Código postal:</span> 
+                              <span class="font-weight-bold">{{eport.params.endereco.cod_post}}</span>
+                            </v-list-item-title>
+                          </v-list-item> 
+
+                          <v-list-item class="my-n4" v-if="(typeof eport.params.endereco.cidade !== 'undefined')">
+                            <v-list-item-action>
+                              <v-icon color="indigo">mdi-city</v-icon>
+                            </v-list-item-action>
+                            <v-list-item-title class="ml-n6">
+                              <span class="font-weight-light" style="display:inline;">Cidade:</span> 
+                              <span class="font-weight-bold">{{eport.params.endereco.cidade}}</span>
+                            </v-list-item-title>
+                          </v-list-item>
+
+                          <v-list-item id="dados_pessoais" class="my-n4" v-if="(typeof eport.params.endereco.pais !== 'undefined')">
+                            <v-list-item-action>
+                              <v-icon color="indigo">mdi-flag-outline</v-icon>
+                            </v-list-item-action>
+                            <v-list-item-title class="ml-n6">
+                              <span class="font-weight-light" style="display:inline;">País:</span> 
+                              <span class="font-weight-bold">{{eport.params.endereco.pais}}</span>
+                            </v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-col>
+                    </v-row>
+                  </v-list>
+
+                  <v-list id="work" class="indigo lighten-5" >
+                    <v-card-title><h3>Experiências profissionais</h3></v-card-title>
+                    <v-list v-for="(work, index) in eport.params.trabalhos" :key="index" class="indigo lighten-5">
+                      <v-card class="mx-auto" color="indigo" dark rounded>
+                        <v-card-title>
+                          <v-icon small left class="black--text">
+                            mdi-clipboard-file-outline
+                          </v-icon>
+                          <span class="black--text text-subtitle-1 font-weight-bold" >{{work.funcao}}</span>
+                        </v-card-title>
+                        <v-card-text v-if="work['em_curso'] == true" class="text-subtitle-2 font-weight-bold my-n3">
+                          {{work.ent_empregadora}} | {{ new Date(work['data_int'].inicio).getDate() + '/' + (new Date(work['data_int'].inicio).getMonth()+1) + '/' + new Date(work['data_int'].inicio).getFullYear() }} - EM CURSO
+                        </v-card-text>
+                        <v-card-text v-else class="text-subtitle-2 font-weight-bold my-n3">
+                          {{work.ent_empregadora}} | {{ new Date(work['data_int'].inicio).getDate() + '/' + (new Date(work['data_int'].inicio).getMonth()+1) + '/' + new Date(work['data_int'].inicio).getFullYear() }} - {{ new Date(work['data_int'].fim).getDate() + '/' + (new Date(work['data_int'].fim).getMonth()+1) + '/' + new Date(work['data_int'].fim).getFullYear() }}
+                        </v-card-text>
+                        <v-card-text class="text-h6 font-weight-bold mt-n7">
+                          {{work.responsabilidades}}
+                        </v-card-text>
+                      </v-card>
+                    </v-list>
+                  </v-list>
+
+                  <v-list id="edu" class="indigo lighten-5" >
+                    <v-card-title><h3>Educação e formação</h3></v-card-title>
+                    <v-list v-for="(edu, index) in eport.params.educacoes" :key="index" class="indigo lighten-5">
+                      <v-card  class="mx-auto" color="indigo" dark rounded>
+                        <v-card-title>
+                          <v-icon small left class="black--text">
+                            mdi-clipboard-file-outline
+                          </v-icon>
+                          <span class="black--text text-subtitle-1 font-weight-bold" >{{edu.titulo}}</span>
+                        </v-card-title>
+                        <v-card-text v-if="edu['em_curso'] == true" class="text-subtitle-2 font-weight-bold my-n3">
+                          {{edu.organizacao}} | {{ new Date(edu['data_int'].inicio).getDate() + '/' + (new Date(edu['data_int'].inicio).getMonth()+1) + '/' + new Date(edu['data_int'].inicio).getFullYear() }} - EM CURSO
+                        </v-card-text>
+                        <v-card-text v-else class="text-subtitle-2 font-weight-bold my-n3">
+                          {{edu.organizacao}} | {{ new Date(edu['data_int'].inicio).getDate() + '/' + (new Date(edu['data_int'].inicio).getMonth()+1) + '/' + new Date(edu['data_int'].inicio).getFullYear() }} - {{ new Date(edu['data_int'].fim).getDate() + '/' + (new Date(edu['data_int'].fim).getMonth()+1) + '/' + new Date(edu['data_int'].fim).getFullYear() }}
+                        </v-card-text>
+                        <v-card-text class="text-h6 font-weight-bold mt-n7">
+                          {{edu.descricao}}
+                        </v-card-text>
+                      </v-card>
+                    </v-list>
+                  </v-list>
+
+                  <v-list id="skills" class="indigo lighten-5" >
+                    <v-card-title><h3>Competências pessoais</h3></v-card-title>
+                    <v-card  class="mx-auto" color="indigo" dark rounded>
+                      <v-card-title>
+                        <v-icon v-if="eport.params.competencias_pessoais.carta_conducao" small left class="black--text">
+                          mdi-check
+                        </v-icon>
+                        <v-icon v-else small left class="black--text">
+                          mdi-close
+                        </v-icon>
+                        <span class="black--text text-subtitle-1 font-weight-bold" >Carta de condução</span>
+                      </v-card-title>
+                      <v-card-text class="text-h6 font-weight-bold">
+                         <span color="indigo lighten-5" class="font-weight-light" style="display:inline;">Línguas maternas:</span> 
+                      </v-card-text>
+                      <v-list class="indigo mt-n6" v-for="(lm, index_elem) in eport.params.competencias_pessoais['lingua_materna']" :key="index_elem">
+                          <v-list-item v-if="lm.nome != ''">
+                            <v-list-item-title>- {{lm.nome}}</v-list-item-title>
+                          </v-list-item>
+                      </v-list>
+                      <v-card-text class="text-h6 font-weight-bold mt-n5">
+                        <span color="indigo lighten-5" class="font-weight-light" style="display:inline;">Línguas não maternas:</span> 
+                      </v-card-text>
+                      <v-list class="indigo mt-n6" v-for="(lm, index_ele) in eport.params.competencias_pessoais['outra_lingua']" :key="index_ele">
+                          <v-list-item v-if="lm.nome != ''">
+                            <v-list-item-title>- {{lm.nome}}</v-list-item-title>
+                          </v-list-item>
+                      </v-list>
+                      <v-card-text class="text-h6 font-weight-bold mt-n5">
+                        <span color="indigo lighten-5" class="font-weight-light" style="display:inline;">Competências digitais:</span> 
+                      </v-card-text>
+                      <v-list class="indigo mt-n6" v-for="(lm, index_el) in eport.params.competencias_pessoais['comp_digital']" :key="index_el">
+                          <v-list-item v-if="lm.competencia != ''">
+                            <v-list-item-title>- {{lm.competencia}}</v-list-item-title>
+                          </v-list-item>
+                      </v-list>
+                    </v-card>
+                  </v-list>
+
+                  <v-list id="extra" class="indigo lighten-5" >
+                    <v-card-title><h3>Informação extra</h3></v-card-title>
+                    <v-list v-for="(tipo, index) in eport.params.tipos" :key="index" class="indigo lighten-5">
+                      <v-card  class="mx-auto" color="indigo" dark rounded>
+                        <v-card-title>
+                          <v-icon small left class="black--text">
+                            mdi-clipboard-file-outline
+                          </v-icon>
+                          <span class="black--text text-subtitle-1 font-weight-bold" >{{tipo.nome }}</span>
+                        </v-card-title>
+                        <v-list v-for="(elem, index_elem) in tipo.campo_int" :key="index_elem" class="indigo">
+                              <v-list-item v-if="tipo.campo_int[index_elem].nome != '' && tipo.campo_int[index_elem].valor != ''" class="my-n4">
+                                <v-list-item-content>
+                                  <span color="indigo lighten-5" class="font-weight-light" style="display:inline;">{{ tipo.campo_int[index_elem].nome }}:</span> 
+                                  <span class="font-weight-bold">{{ tipo.campo_int[index_elem].valor }}</span>
+                                </v-list-item-content>
+                              </v-list-item>
+                                <v-divider v-if="tipo.campo_int[index_elem].nome != '' && tipo.campo_int[index_elem].valor != ''" inset></v-divider>
+                            </v-list>
+                            <v-list v-for="(elem, index_ele) in tipo.campo_txt" :key="index_ele" class="indigo">
+                              <v-list-item v-if="tipo.campo_txt[index_ele].nome != '' && tipo.campo_txt[index_ele].descricao != ''" class="my-n4">
+                                <v-list-item-content >
+                                  <span color="indigo lighten-5" class="font-weight-light" style="display:inline;">{{ tipo.campo_txt[index_ele].nome }}:</span> 
+                                  <span class="font-weight-bold">{{ tipo.campo_txt[index_ele].descricao }}</span>
+                                </v-list-item-content>
+                              </v-list-item>
+                              <v-divider v-if="tipo.campo_txt[index_ele].nome != '' && tipo.campo_txt[index_ele].descricao != ''" inset></v-divider>
+                            </v-list>
+                      </v-card>
+                    </v-list>
+                  </v-list>
+                </v-container>
+                <v-divider></v-divider>
+                <v-card-actions >
+                  <v-btn color="indigo" plain  @click="exportToPDF"><v-icon left>mdi-download</v-icon>Criar CV</v-btn>
+                  <v-btn color="indigo" plain  @click="eportToCV_popup = false"><v-icon left>mdi-close</v-icon>Cancelar</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
           </v-card>
         </v-container>
     </div>  
 </template>
 
 <script>
-import { VContainer, VRow, VCol, VLayout, VImg, VCard, VCardText, VCardTitle, VCardSubtitle, VDivider, VCardActions, VProgressLinear, VList, VListItem, VListItemTitle,  VListItemAction, VListItemContent, VAppBarNavIcon, VToolbarTitle, VMenu, VProgressCircular, VFileInput, VDialog, VItem, VHover, VOverlay, VFadeTransition, VForm } from 'vuetify/lib'
+import { VContainer, VRow, VCol, VLayout, VImg, VCard, VCardText, VCardTitle, VCardSubtitle, VDivider, VCardActions, VProgressLinear, VList, VListItem, VListItemTitle,  VListItemAction, VListItemContent, VAppBarNavIcon, VToolbarTitle, VMenu, VProgressCircular, VFileInput, VDialog, VItem, VHover, VOverlay, VFadeTransition, VForm, VListItemAvatar } from 'vuetify/lib'
 import NavBar from '../components/NavBar'
 import pdf from 'vue-pdf'
 import axios from 'axios'
+import html2pdf from 'html2pdf.js'
 
 export default {
     data: () => ({
@@ -186,13 +460,13 @@ export default {
       pdf: null,
       adicionar_popup: false,
       adicionar_popup_cert: false,
+      eportToCV_popup: false,
       criar_popup: false,
       image_popup: false,
       strapi_url: 'http://localhost:1337',
       currentPage: 0,
       pageCount: 0,
       valid : true,
-      strapi_url: 'http://localhost:1337',
       certificate: {},
       delete_popup: false,
       delete_index: -1,
@@ -230,7 +504,8 @@ export default {
         VHover,
         VOverlay,
         VFadeTransition,
-        VForm 
+        VForm,
+        VListItemAvatar
     },
 
     computed: {
@@ -245,6 +520,10 @@ export default {
         users () {
             return this.$store.state.users.all;
         },
+        eport () {
+          console.log("Eport: "+ JSON.stringify(this.$store.state.users.eport))
+          return this.$store.state.users.eport
+        },
     },
     
     methods: {
@@ -252,21 +531,6 @@ export default {
         this.loading = true
         setTimeout(() => (this.loading = false), 2000)
       },
-
-      exportToPDF () {
-        var element = document.getElementById('document');
-        var opt = {
-          margin:1,
-          filename:'eportefolio.pdf',
-          image: { type: 'jpeg', quality: 0.95 },
-          html2canvas:  { scale: 2 },
-          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };
-        // New Promise-based usage:
-        html2pdf().set(opt).from(element).save();
-        // Old monolithic-style usage:
-        html2pdf(element, opt);
-		  },
 
       downloadFile (cv) {
         axios.get(cv.url.split('/uploads/').join(`${this.strapi_url}/uploads/`), { responseType: 'blob' })
@@ -323,6 +587,54 @@ export default {
             card.popup = false
         }
       },
+
+      exportToPDF () {
+        this.work_experience = true
+        this.education = true
+        this.personal_skills = true
+        this.extra = true
+        var element = document.getElementById('document');
+        var opt = {
+          margin:1,
+          filename:'eportefolio.pdf',
+          image: { type: 'jpeg', quality: 0.95 },
+          pagebreak: {  after:['#dados_pessoais']},
+          html2canvas: { 
+            scale:2,
+            useCORS: true, 
+            y:0, 
+            scrollY: 0
+          },
+          jsPDF: { unit: 'mm', orientation: 'portrait', format:'a4' },
+        }
+        var self = this
+        // New Promise-based usage:
+        html2pdf().set(opt).from(element).save().outputPdf().then(function(pdf) { 
+          var aux = btoa(pdf)
+
+          // helper function: generate a new file from base64 String
+          const dataURLtoFile = (dataurl, filename) => {
+            console.log(pdf)
+            console.log(aux)
+            const bstr = atob(dataurl)
+            let n = bstr.length
+            const u8arr = new Uint8Array(n)
+            while (n) {
+              u8arr[n - 1] = bstr.charCodeAt(n - 1)
+              n -= 1 // to make eslint happy
+            }
+            return new File([u8arr], filename, { type: 'application/pdf' })
+          }
+
+          // generate file from base64 string
+          const file = dataURLtoFile(aux, 'eportefolio.pdf')
+          // put file into form data
+          const data = new FormData()
+          data.append('files', file, file.name)
+
+          self.$store.dispatch('users/put_file', { user : self.$store.state.users.user.params, file : data, tipo: 'cvs'})
+        })
+		  },
 
       open_image(cert){
         console.log(cert)

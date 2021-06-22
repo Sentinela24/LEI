@@ -21,6 +21,7 @@ export const userService = {
     deleteAccountUser,
     updateAccountUser,
     updateFeed,
+    addFeed,
     updateLibrary
 };
 
@@ -214,9 +215,47 @@ function create_eport(eportfolio, address, work, education, skills, type) {
 }
 
 /* PUT eportfolio's edition */
-function updateEport(eportfolio, id_eport) {
+function updateEport(eportfolio, address, work, education, skills, type, id_eport) {
     
-    console.log("eport_id: " + JSON.stringify(id_eport))
+    var aux = JSON.parse(eportfolio.get('form'))
+
+    if(address != null)
+        aux['endereco'] = address
+
+    console.log(aux)
+
+    for(let w of work){
+        if(typeof aux['trabalhos'] === 'undefined'){
+            
+        console.log(w)
+            aux['trabalhos'] = [w]
+        }
+        else
+            aux['trabalhos'].push(w)
+    }
+
+    if(skills != null)
+        aux['competencias_pessoais'] = skills
+
+    for(let e of education){
+        if(typeof aux['educacoes'] === 'undefined')
+            aux['educacoes'] = [e]
+        else
+            aux['educacoes'].push(e)
+    }
+
+    for(let t of type){
+        if(typeof aux['tipos'] === 'undefined')
+            aux['tipos'] = [t]
+        else
+            aux['tipos'].push(t)
+    }
+    console.log(aux)
+
+    eportfolio.delete('form')
+    eportfolio.set('data', JSON.stringify(aux)) 
+    for(var p in eportfolio)
+        console.log(p)
 
     const requestOptions = {
         method: 'PUT',
@@ -304,7 +343,7 @@ function getTypes(){
     return fetch(`${config.apiUrl}/tipos`, requestOptions).then(handleResponse);
 }
 
-/* DELETE operation */
+/* DELETE operation from feed */
 function updateFeed(feed, user){
     const requestOptions = {
         method: 'PUT',
@@ -314,6 +353,29 @@ function updateFeed(feed, user){
 
     return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(handleResponse);
 }
+
+/* ADD operation to feed */
+function addFeed(operation, when, where, note, user){
+    var aux
+
+    if(user.feed.length > 0){
+        user.feed.push({operacao: operation, data: when, tipo: where, nota: note })
+        aux = JSON.stringify(user.feed)
+    }
+    else    
+        aux = '{"feed" : [{"operacao": ' + operation + ', "data": ' + when + ', "tipo": ' + where + ', "nota":' + note + '}]}'
+    console.log(aux)
+    const requestOptions = {
+        method: 'PUT',
+        headers: special_authHeader(),
+        body: aux
+    };
+
+    return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(handleResponse);
+}
+
+
+
 
 /* DELETE document */
 function updateLibrary(docs, user, type){

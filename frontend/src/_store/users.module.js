@@ -9,7 +9,8 @@ export const users = {
         types: {},
         user: null, 
         eport: null,
-        address: null
+        address: null,
+        cv: null
     },
     actions: {
 
@@ -57,10 +58,7 @@ export const users = {
         },
 
         /* Insert eportfolio into database and associate that same eportfolio with the user who inserted it */
-        async putEportfolio({ dispatch, commit }, { eportfolio, address, work,  address_work, education, address_education, skills, type, user }) {
-            commit('putEportfolioRequest');
-            
-            console.log("eport: " + JSON.stringify(eportfolio)) 
+        async putEportfolio({ dispatch, commit }, { eportfolio, address, work,  address_work, education, address_education, skills, type, user, first }) {
 
             let eport_has_address= false
             let work_has_address = []
@@ -153,12 +151,6 @@ export const users = {
             let wp = await Promise.all(work_promises)
             let ep = await Promise.all(edu_promises)
             let tp = await Promise.all(type_promises)
-            for(let o of wp)
-                console.log(o)
-            for(let o of ep)
-                console.log(o)
-            for(let o of tp)
-                console.log(o)
 
             if(!eport_has_address)
                 ap[0] = null
@@ -170,16 +162,172 @@ export const users = {
             userService.create_eport(eportfolio, ap[0], wp, ep, s, tp)
                 .then(
                     eport => {
-                        userService.updateUser( user, eport)
+                        if(first){
+                            userService.updateUser( user, eport)
+                                .then(
+                                    u => {
+                                        userService.addFeed('Criação', new Date(), 'ePortefolio', 'Criaste o teu ePortefolio, parabéns!', u).then(
+                                            f => {
+                                                commit('getUserSuccess', u),
+                                                
+                                                router.push('/eportfolio');
+                                                setTimeout(() => {
+                                                // display success message after route change completes
+                                                    dispatch('alert/success', 'Eportfolio adicionado', { root: true });
+                                                })
+                                            }
+                                        )
+                                    },
+                                    error => {
+                                        commit('getUserFailure', error);
+                                        dispatch('alert/error', 'Falhou a adicionar primeiro eport', { root: true });
+                                    }
+                                )
+                        }
+                        else{
+                            userService.getById(eport.id, 'eportfolios')
+                                .then(
+                                    c => {
+                                        commit('getCVSuccess', c),
+                                        setTimeout(() => {
+                                            dispatch('alert/success', 'Eportfolio pronto a ser convertido', { root: true });
+                                        })
+                                    },
+                                    error => {
+                                        commit('getCVFailure', error);
+                                        dispatch('alert/error', 'Falhou a adicionar segundo eport', { root: true });
+                                    }
+                                )
+                        }
+
+                    },
+                    error => {
+                        commit('getUserFailure', error);
+                        dispatch('alert/error', 'Falhou a validar', { root: true });
+                    }
+                ); 
+        } , 
+    
+        /* Edit eportfolio */
+        async editEportfolio({ dispatch, commit }, { eportfolio, address, work,  address_work, education, address_education, skills, type, user, id_eport }) {
+            commit('putEportfolioRequest');
+
+            let eport_has_address= false
+            let work_has_address = []
+            let edu_has_address  = []
+
+            let address_promises = []
+
+            let is_empty = Object.values(JSON.parse(address)).every(x => x === null || x === '')
+            if(!is_empty){
+                address_promises.push(userService.create("enderecos", address, null))
+                eport_has_address = true
+            }   
+
+            is_empty = true
+            for(let i = 0; i < Object.values(JSON.parse(address_work))[0].length; i++){
+                
+                var data = Object.values(JSON.parse(address_work))[0][i]
+                for(var key in data){
+                    if(data[key] !== ""){
+                        is_empty = false
+                        break;
+                    }
+                }
+                if(!is_empty){  
+                    address_promises.push(userService.create("enderecos", JSON.stringify(Object.values(JSON.parse(address_work))[0][i]), null))
+                    work_has_address.push(i)
+                }
+            }
+
+            is_empty = true
+            for(let i = 0; i < Object.values(JSON.parse(address_education))[0].length; i++){
+
+                var data = Object.values(JSON.parse(address_education))[0][i]
+                for(var key in data){
+                    if(data[key] !== ""){
+                        is_empty = false
+                        break;
+                    }
+                }
+
+                if(!is_empty){
+                    address_promises.push(userService.create("enderecos", JSON.stringify(Object.values(JSON.parse(address_education))[0][i]), null))
+                    edu_has_address.push(i)
+                }
+            }
+
+            let ap = await Promise.all(address_promises)
+
+            let work_promises = []
+            let edu_promises = []
+            let type_promises = []
+
+            let inc = 0
+            for(let i = 0; i < Object.values(JSON.parse(work))[0].length; i++){
+                if(work_has_address.includes(i))
+                    work_promises.push(userService.create("experiencia-profissionals", JSON.stringify(Object.values(JSON.parse(work))[0][i]), ap[inc++]))
+                else
+                    work_promises.push(userService.create("experiencia-profissionals", JSON.stringify(Object.values(JSON.parse(work))[0][i]), null))
+            }
+
+            for(let i = 0; i < Object.values(JSON.parse(education))[0].length; i++){
+                if(edu_has_address.includes(i))
+                    edu_promises.push(userService.create("educacaos", JSON.stringify(Object.values(JSON.parse(education))[0][i]), ap[inc++]))
+                else
+                    edu_promises.push(userService.create("educacaos", JSON.stringify(Object.values(JSON.parse(education))[0][i]), null))
+            }
+            
+            let s = 0
+            is_empty = Object.values(JSON.parse(skills)).every(x => x === null || x === '')
+            if(!is_empty)
+                s = await userService.create("competencias-pessoais", skills, null)
+            else
+                s = null
+
+            is_empty = true
+            for(let i = 0; i < Object.values(JSON.parse(type))[0].length; i++){
+
+                var data = Object.values(JSON.parse(type))[0][i]
+                for(var key in data){
+                    if(data[key] !== ""){
+                        is_empty = false
+                        break;
+                    }
+                }
+
+                if(!is_empty)
+                    type_promises.push(userService.create("tipos", JSON.stringify(Object.values(JSON.parse(type))[0][i]), null))
+            }
+
+            let wp = await Promise.all(work_promises)
+            let ep = await Promise.all(edu_promises)
+            let tp = await Promise.all(type_promises)
+
+            if(!eport_has_address)
+                ap[0] = null
+
+            for (var p in eportfolio) {
+                    console.log("Elemento do eport: " + p);
+                }
+
+            userService.updateEport(eportfolio, ap[0], wp, ep, s, tp, id_eport)
+                .then(
+                    eport => {
+                        userService.getById( user.id, 'users')
                             .then(
                                 u => {
-                                    commit('getUserSuccess', u),
+                                    userService.addFeed('Edição', new Date(), 'ePortefolio', 'Editaste o teu ePortefolio', u).then(
+                                        f => {
+                                            commit('getUserSuccess', u),
 
-                                    router.push('/eportfolio');
-                                    setTimeout(() => {
-                                        // display success message after route change completes
-                                        dispatch('alert/success', 'Eportfolio adicionado', { root: true });
-                                    })
+                                            router.push('/eportfolio');
+                                            setTimeout(() => {
+                                                // display success message after route change completes
+                                                dispatch('alert/success', 'Eportfolio editado', { root: true });
+                                            })
+                                        }
+                                    )
                                 },
                                 error => {
                                     commit('getUserFailure', error);
@@ -192,37 +340,6 @@ export const users = {
                         dispatch('alert/error', error, { root: true });
                     }
                 ); 
-        } , 
-    
-        /* Edit eportfolio */
-        editEportfolio({ dispatch, commit }, { eportfolio, user }) {
-            console.log("eport: " + JSON.stringify(eportfolio))
-
-                userService.updateEport(eportfolio, user.eportfolios[0].id)
-                    .then(
-                        eport => {
-                            userService.getById( user.id )
-                                .then(
-                                    u => {
-                                        commit('getUserSuccess', u),
-
-                                        router.go(-1);
-                                        setTimeout(() => {
-                                            // display success message after route change completes
-                                            dispatch('alert/success', 'Eportfolio editado', { root: true });
-                                        })
-                                    },
-                                    error => {
-                                        commit('getUserFailure', error);
-                                        dispatch('alert/error', error, { root: true });
-                                    }
-                                )
-                        },
-                        error => {
-                            commit('getUserFailure', error);
-                            dispatch('alert/error', error, { root: true });
-                        }
-                    );
         },
 
         /* Delete eportfolio */
@@ -272,7 +389,7 @@ export const users = {
                             router.push('/home')
                             setTimeout(() => {
                               // display success message after route change completes
-                              dispatch('alert/success', 'Conta removido', { root: true });
+                              dispatch('alert/success', 'Conta removida', { root: true });
                             })
                             resolve()
                         },
@@ -290,14 +407,17 @@ export const users = {
 
             userService.editUser(password, user.id)
                 .then(
-                    user => {
-                        commit('getUserSuccess', user),
-
-                        router.push('/eportfolio');
-                        setTimeout(() => {
-                            // display success message after route change completes
-                            dispatch('alert/success', 'Password editada', { root: true })
-                        })
+                    u => {
+                        userService.addFeed('Edição', new Date(), 'Conta', 'Shhhh, alteraste a tua password', u).then(
+                            f => {
+                                commit('getUserSuccess', u),
+                                
+                                setTimeout(() => {
+                                // display success message after route change completes
+                                    dispatch('alert/success', 'Password alterada', { root: true });
+                                })
+                            }
+                        )
                     },
                     error => {
                         commit('getUserFailure', error)
@@ -310,13 +430,17 @@ export const users = {
         edit_account({ dispatch, commit }, { user }){
             userService.updateAccountUser(user)
                 .then(
-                    user => {
-                        commit('getUserSuccess', user),
-
-                        setTimeout(() => {
-                            // display success message after route change completes
-                            dispatch('alert/success', 'Conta editada', { root: true })
-                        })
+                    u => {
+                        userService.addFeed('Edição', new Date(), 'Conta', 'Alteraste os dados da tua conta.', u).then(
+                            f => {
+                                commit('getUserSuccess', u),
+                                
+                                setTimeout(() => {
+                                // display success message after route change completes
+                                    dispatch('alert/success', 'Conta editada', { root: true });
+                                })
+                            }
+                        )
                     },
                     error => {
                         if(error[0].messages[0].message.localeCompare("Email already taken") == 0)
@@ -329,7 +453,6 @@ export const users = {
 
         /* Insert CV into database and associate that same CV to the user that inserted */
         put_file({ dispatch, commit }, { user, file, tipo}){
-            commit('getUserRequest', { user });
 
             userService.createFile(file)
                 .then(
@@ -338,19 +461,25 @@ export const users = {
                         userService.updateUserFile( user, cv, tipo)
                             .then(
                                 u => {
-                                    commit('getUserSuccess', u);
-                                    setTimeout(() => {
-                                        // display success message after route change completes
-                                        if(tipo == 'cvs')
-                                            dispatch('alert/success', 'Novo CV adicionado', { root: true });
-                                        else if(tipo == 'certificados')
-                                            dispatch('alert/success', 'Novo certificado/diploma adicionado', { root: true });
-                                        else if(tipo == 'cartas')
-                                            dispatch('alert/success', 'Nova carta de apresentação adicionada', { root: true });
-                                        else
-                                            dispatch('alert/success', 'Novo documento adicionado', { root: true });
+                                    userService.addFeed('Adição', new Date(), 'Biblioteca', 'Introduziste novo documento na biblioteca(' + tipo + ')', u).then(
+                                        f => {
+                                            commit('getUserSuccess', u),
+                                            
+                                            router.push('/biblioteca')
+                                            setTimeout(() => {
+                                                // display success message after route change completes
+                                                if(tipo == 'cvs')
+                                                    dispatch('alert/success', 'Novo CV adicionado', { root: true });
+                                                else if(tipo == 'certificados')
+                                                    dispatch('alert/success', 'Novo certificado/diploma adicionado', { root: true });
+                                                else if(tipo == 'cartas')
+                                                    dispatch('alert/success', 'Nova carta de apresentação adicionada', { root: true });
+                                                else
+                                                    dispatch('alert/success', 'Novo documento adicionado', { root: true });
 
-                                    })
+                                            })
+                                        }
+                                    ) 
                                 },
                                 error => {
                                     commit('getUserFailure', error);
@@ -394,12 +523,16 @@ export const users = {
             userService.updateLibrary(docs, user, type)
                 .then(
                     u => {
-                        commit('getUserSuccess', u)
-                        setTimeout(() => {
-                            // display success message after route change completes
-                            dispatch('alert/success', 'Biblioteca atualizada', { root: true });
-
-                        })
+                        userService.addFeed('Remoção', new Date(), 'Biblioteca', 'Removeste um documento da tua biblioteca(' + type +')', u).then(
+                            f => {
+                                commit('getUserSuccess', u)
+                                setTimeout(() => {
+                                    // display success message after route change completes
+                                    dispatch('alert/success', 'Biblioteca atualizada', { root: true });
+                                
+                                })
+                            }
+                        )
                     },
                     error => {
                         commit('getUserFailure', error);
@@ -453,6 +586,15 @@ export const users = {
         },
         getEportFailure(state, error) {
             state.eport = { error };
+        },
+        getCVRequest(state, id) {
+            state.cv = { loading: true };
+        },
+        getCVSuccess(state, cv) {
+            state.cv = { params: cv };
+        },
+        getCVFailure(state, error) {
+            state.cv = { error };
         },
         getAddressRequest(state, id) {
             state.address = { loading: true };

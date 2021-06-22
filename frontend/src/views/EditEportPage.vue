@@ -956,7 +956,7 @@ export default {
                   console.log("Elemento do form_v1: " + p);
               }
 
-              this.$store.dispatch('users/putEportfolio', { eportfolio: formEport, address: formAddress, work: formWork, address_work: formAddressWork, education: formEducation, address_education: formAddressEducation, skills: formSkills, type: formExtra, user : this.$store.state.users.user.params })
+              this.$store.dispatch('users/editEportfolio', { eportfolio: formEport, address: formAddress, work: formWork, address_work: formAddressWork, education: formEducation, address_education: formAddressEducation, skills: formSkills, type: formExtra, user : this.$store.state.users.user.params, id_eport: this.$store.state.users.eport.params.id })
             }
         },
         reset () {

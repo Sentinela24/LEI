@@ -363,7 +363,7 @@
               <v-divider></v-divider>
               
               <v-card-actions >
-                <v-btn color="primary" dark rounded  @click="exportToPDF"><v-icon left>mdi-download</v-icon>Converter para PDF</v-btn>
+                <v-btn color="indigo" plain  @click="exportToPDF"><v-icon left>mdi-download</v-icon>Converter para PDF</v-btn>
               </v-card-actions> 
             </v-card>
           </v-card>
@@ -451,7 +451,6 @@ export default {
         setTimeout(() => (this.loading = false), 2000)
       },
 
-
       exportToPDF () {
         this.work_experience = true
         this.education = true
@@ -463,9 +462,12 @@ export default {
           filename:'eportefolio.pdf',
           image: { type: 'jpeg', quality: 0.95 },
           pagebreak: {  after:['#dados_pessoais']},
-          html2canvas: { scale:2,
-useCORS: true, y:0, scrollY: 0
-},
+          html2canvas: { 
+            scale:2,
+            useCORS: true, 
+            y:0, 
+            scrollY: 0
+          },
           jsPDF: { unit: 'mm', orientation: 'portrait', format:'a4' },
         };
         // New Promise-based usage:

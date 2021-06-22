@@ -1,11 +1,4 @@
 {
-  "name": "vue-vuex-jwt-authentication-example",
-  "version": "1.0.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cornflourblue/vue-vuex-jwt-authentication-example.git"
-  },
-  "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --open"
   },

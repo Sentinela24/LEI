@@ -22,7 +22,7 @@
             </template>
             <template v-slot:[`item.data`]="{ item }">
               <v-list-item class="ml-n4"> 
-                {{ new Date(item.data).getDate() + '/' + new Date(item.data).getMonth()+1 + '/' + new Date(item.data).getFullYear()   + ' ' + new Date(item.data).getHours() + ':' + new Date(item.data).getMinutes() }}
+                {{ new Date(item.data).getDate() + '/' + (new Date(item.data).getMonth()+1) + '/' + new Date(item.data).getFullYear()   + ' ' + new Date(item.data).getHours() + ':' + new Date(item.data).getMinutes() }}
               </v-list-item>
             </template>
             <template v-slot:[`item.actions`]="{ item }">
